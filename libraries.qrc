@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>libraries/PHB.xml</file>
+        <file>libraries/MM.xml</file>
+    </qresource>
+</RCC>

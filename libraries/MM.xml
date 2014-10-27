@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<source>
+  <name>Monster Manual</name>
+  <content>
+  <monster>
+		<name>Bandit Captain</name>
+		<size>Medium</size>
+		<type>humanoid (any race)</type>
+		<alignment>any non-lawful alignment</alignment>
+		<ac>15 (studded leather)</ac>
+		<hp>65 (10d8 + 20)</hp>
+		<speed>30 ft.</speed>
+		<scores>15 16 14 14 11 14</scores>
+		<sthrows>Str +4, Dex +5, Wis +2</sthrows>
+		<skills>Athletics +4, Deception +4</skills>
+		<senses>passive Perception 10</senses>
+		<langs>any two languages</langs>
+		<challenge>2 (450 XP)</challenge>
+		<actions>
+			<action>
+				<name>Multiattack. </name>
+				<effect>The captain makes three melee attacks: two with its scimitar and one with its dagger. Or the captain makes two ranged attacks with its daggers.</effect>
+			</action>
+			<action>
+				<name>Scimitar. </name>
+				<attack>Melee Weapon Attack: </attack>
+				<effect>+5 to hit, reach 5 ft., one target. Hit: 6 (ld6 + 3) slashing damage.</effect>
+			</action>
+			<action>
+				<name>Dagger. </name>
+				<attack>Melee or Ranged Weapon Attack: </attack>
+				<effect>+5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</effect>
+			</action>
+		</actions>
+		<reactions>
+			<reaction>
+				<name>Parry. </name>
+				<effect>The captain adds 2 to its AC against one melee attack that would hit it. To do so, the captain must see the attacker and be wielding a melee weapon.</effect>
+			</reaction>
+		</reactions>
+	</monster>
+	<monster>
+		<name>Lamia</name>
+		<size>Large</size>
+		<type>monstrosity</type>
+		<alignment>chaotic evil</alignment>
+		<ac>13 (natural armor)</ac>
+		<hp>97 (13d10 + 26)</hp>
+		<speed>30 ft.</speed>
+		<scores>16 13 15 14 15 16</scores>
+	</monster>
+	<monster>
+		<name>Lich</name>
+		<size>Medium</size>
+		<type>undead</type>
+		<alignment>any evil alignment</alignment>
+		<ac>17 (natural armor)</ac>
+		<hp>135 (18d8 + 54)</hp>
+		<speed>30 ft.</speed>
+		<scores>11 16 16 20 14 16</scores>
+		<sthrows>Con +10, Int +12, Wis +9</sthrows>
+		<skills>Arcana +18, History +12, Insight +9, Perception +9</skills>
+		<damres>cold, lightning, necrotic</damres>
+		<damimms>poison; bludgeoning, piercing, and slashing from nonmagical weapons</damimms>
+		<conimms>charmed, exhaustion, frightened, paralyzed, poisoned</conimms>
+		<senses>truesight 120 ft., passive Perception 19</senses>
+		<langs>Common plus up to five other languages</langs>
+		<challenge>21 (33,000 XP)</challenge>
+		<traits>
+			<trait>
+				<name>Legendary Resistance (3/Day). </name>
+				<effect>If the lich fails a saving throw, it can choose to succeed instead.</effect>
+			</trait>
+			<trait>
+				<name>Rejuvenation. </name>
+				<effect>If it has a phylactery, a destroyed lich gains a new body in 1d10 days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the phylactery.</effect>
+			</trait>
+			<spellcasting>
+				<name>Spellcasting. </name>
+				<effect>The lich is an 18th-level spellcaster. Its spellcasting ability is Intelligence (spell save DC 20, +12 to hit with spell attacks). The lich has the following wizard spells prepared:</effect>
+				<lines>
+					<line>
+						<usage>Cantrips (at will): </usage>
+						<spells>mage hand, prestidigitation, ray of frost</spells>
+					</line>
+					<line>
+						<usage>1st level (4 slots): </usage>
+						<spells>detect magic, magic missile, shield, thunderwave</spells>
+					</line>
+					<line>
+						<usage>2nd level (3 slots): </usage>
+						<spells>detect thoughts, invisibility, Melf's acid arrow, mirror image</spells>
+					</line>
+					<line>
+						<usage>3rd level (3 slots): </usage>
+						<spells>animate dead, counterspell, dispel magic, fireball</spells>
+					</line>
+					<line>
+						<usage>4th level (3 slots): </usage>
+						<spells>blight, dimension door</spells>
+					</line>
+					<line>
+						<usage>5th level (3 slots): </usage>
+						<spells>cloudkill, scrying</spells>
+					</line>
+					<line>
+						<usage>6th level (1 slot): </usage>
+						<spells>disintegrate, globe of invulnerability</spells>
+					</line>
+					<line>
+						<usage>7th level (1 slot): </usage>
+						<spells>finger of death, plane shift</spells>
+					</line>
+					<line>
+						<usage>8th level (1 slot): </usage>
+						<spells>dominate monsters, power word stun</spells>
+					</line>
+					<line>
+						<usage>9th level (1 slot): </usage>
+						<spells>power word kill</spells>
+					</line>
+				</lines>
+			</spellcasting>
+			<trait>
+				<name>Turn Resistance. </name>
+				<effect>The lich has advantage on saving throws against any effect that turns undead.</effect>
+			</trait>
+		</traits>
+		<actions>
+			<action>
+				<name>Paralyzing Touch. </name>
+				<attack>Melee Spell Attack: </attack>
+				<effect>+12 to hit, reach 5ft., one creature. Hit: 10 (3d6) cold damage The target must succeed on a DC 18 Constitution saving throw or be paralyzed for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</effect>
+			</action>
+		</actions>
+		<lactions>
+			<details>The lich can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The lich regains spent legendary actions at the start of its turn.</details>
+			<laction>
+				<name>Cantrip. </name>
+				<effect>The lich casts a cantrip.</effect>
+			</laction>
+			<laction>
+				<name>Paralyzing Touch (Costs 2 Actions). </name>
+				<effect>The lich uses its Paralyzing Touch.</effect>
+			</laction>
+			<laction>
+				<name>Frightening Gaze (Costs 2 Actions). </name>
+				<effect>The lich fixes its gaze on one creature it can see within 10 feet of it. The target must succeed on a DC 18 Wisdom saving throw against this magic or become frightened for 1 minute. The frightened target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to the lich's gaze for the next 24 hours.</effect>
+			</laction>
+			<laction>
+				<name>Disrupt Life (Costs 3 Actions). </name>
+				<effect>Each living creature within 20 feet of the lich must make a DC 18 Constitution saving throw against this magic, taking 21 (6d6) necrotic damage on a failed save, or half as much damage on a successful one.</effect>
+			</laction>
+		</lactions>
+	</monster>
+	<monster>
+		<name>Sea Horse</name>
+		<size>Tiny</size>
+		<type>beast</type>
+		<alignment>unaligned</alignment>
+		<ac>11</ac>
+		<hp>1 (1d4 - 1)</hp>
+		<speed>0 ft., swim 20ft.</speed>
+		<scores>1 12 8 1 10 2</scores>
+		<senses>Passive perception 10</senses>
+		<langs>---</langs>
+		<challenge>0 (0 XP)</challenge>
+		<traits>
+			<trait>
+				<name>Water Breathing. </name>
+				<effect>The sea horse can only breathe underwater.</effect>
+			</trait>
+		</traits>
+	</monster>
+	<spell>
+		<name>Finger of Death</name>
+		<level>7</level>
+		<school>conjuration</school>
+		<casttime>1 action</casttime>
+		<range>60 feet</range>
+		<comps>V, S</comps>
+		<duration>Instantaneous</duration>
+		<description>
+			<line>
+				<plain>You send negative energy coursing through a creature that you can see within range, causing it searing pain. The target must make a Constitution saving throw. It takes 7d8 + 30 necrotic damage on a failed save, or half as much damage on a successful one.</plain>
+			</line>
+			<line>
+				<plain>A humanoid killed by this spell rises at the start of your next turn as a zombie that is permanently under your command, following your verbal orders to the best of its ability.</plain>
+			</line>
+		</description>
+	</spell>
+	<spell>
+		<name>Mage Hand</name>
+		<level>0</level>
+		<school>conjuration</school>
+		<casttime>1 action</casttime>
+		<range>30 feet</range>
+		<comps>V, S</comps>
+		<duration>1 minute</duration>
+		<description>
+			<line>
+				<plain>A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration or until you dismiss it as an action. The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.</plain>
+			</line>
+			<line>
+				<plain>You can use your action to control the hand. You can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial. You can move the hand up to 30 feet each time you use it.</plain>
+			</line>
+			<line>
+				<plain>The hand can’t attack, activate magic items, or carry more than 10 pounds.</plain>
+			</line>
+		</description>
+	</spell>
+	<spell>
+		<name>Magic Missile</name>
+		<level>1</level>
+		<school>evocation</school>
+		<casttime>1 action</casttime>
+		<range>120 feet</range>
+		<comps>V, S</comps>
+		<duration>Instantaneous</duration>
+		<description>
+			<line>
+				<plain>You create three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range. A dart deals 1d4 + 1 force damage to its target. The darts all strike simultaneously, and you can direct them to hit one creature or several.</plain>
+			</line>
+			<line>
+				<bolditalic>At Higher Levels. </bolditalic>
+				<plain>When you cast this spell using a spell slot of 2nd level or higher, the spell creates one more dart for each slot level above 1st.</plain>
+			</line>
+		</description>
+		<test></test>
+	</spell>
+	<spell>
+		<name>Plane Shift</name>
+		<level>7</level>
+		<school>conjuration</school>
+		<casttime>1 action</casttime>
+		<range>touch</range>
+		<comps>V, S, M (a forked, metal rod worth at least 250 gp, attuned to a particular plane of existence)</comps>
+		<duration>Instantaneous</duration>
+		<description>
+			<line>
+				<plain>You and up to eight willing creatures who link hands in a circle are transported to a different plane of existence. You can specify a target destination in general terms, such as the City of Brass on the Elemental Plane of Fire or the palace of Dispater on the second level of the Nine Hells, and you appear in or near that destination. If you are trying to reach the City of Brass, for example, you might arrive in its Street of Steel, before its Gate of Ashes, or looking at the city from across the Sea of Fire, at the DM’s discretion.</plain>
+			</line>
+			<line>
+				<plain>Alternatively, if you know the sigil sequence of a teleportation circle on another plane of existence, this spell can take you to that circle. If the teleportation circle is too small to hold all the creatures you transported, they appear in the closest unoccupied spaces next to the circle.</plain>
+			</line>
+			<line>
+				<plain>You can use this spell to banish an unwilling creature to another plane. Choose a creature within your reach and make a melee spell attack against it. On a hit, the creature must make a Charisma saving throw. If the creature fails this save, it is transported to a random location on the plane of existence you specify. A creature so transported must find its own way back to your current plane of existence.</plain>
+			</line>
+		</description>
+	</spell>
+	<spell>
+		<name>Plane Shift</name>
+		<level>7</level>
+		<school>conjuration</school>
+		<casttime>1 action</casttime>
+		<range>touch</range>
+		<comps>V, S, M (a forked, metal rod worth at least 250 gp, attuned to a particular plane of existence)</comps>
+		<duration>Instantaneous</duration>
+		<description>
+			<line>
+				<plain>You and up to eight willing creatures who link hands in a circle are transported to a different plane of existence. You can specify a target destination in general terms, such as the City of Brass on the Elemental Plane of Fire or the palace of Dispater on the second level of the Nine Hells, and you appear in or near that destination. If you are trying to reach the City of Brass, for example, you might arrive in its Street of Steel, before its Gate of Ashes, or looking at the city from across the Sea of Fire, at the DM’s discretion.</plain>
+			</line>
+			<line>
+				<plain>Alternatively, if you know the sigil sequence of a teleportation circle on another plane of existence, this spell can take you to that circle. If the teleportation circle is too small to hold all the creatures you transported, they appear in the closest unoccupied spaces next to the circle.</plain>
+			</line>
+			<line>
+				<plain>You can use this spell to banish an unwilling creature to another plane. Choose a creature within your reach and make a melee spell attack against it. On a hit, the creature must make a Charisma saving throw. If the creature fails this save, it is transported to a random location on the plane of existence you specify. A creature so transported must find its own way back to your current plane of existence.</plain>
+			</line>
+		</description>
+	</spell>
+	<spell>
+		<name>Prestidigitation</name>
+		<level>0</level>
+		<school>transmutation</school>
+		<casttime>1 action</casttime>
+		<range>10 feet</range>
+		<comps>V, S</comps>
+		<duration>Up to 1 hour</duration>
+		<description>
+			<line>
+				<plain>This spell is a minor magical trick that novice spellcasters use for practice. You create one of the following magical effects within range:</plain>
+			</line>
+			<line>
+				<plain>• You create an instantaneous, harmless sensory effect, such as a shower of sparks, a puff of wind, faint musical notes, or an odd odor.</plain>
+			</line>
+			<line>
+				<plain>• You instantaneously light or snuff out a candle, a torch, or a small campfire.</plain>
+			</line>
+			<line>
+				<plain>• You instantaneously clean or soil an object no larger than 1 cubic foot.</plain>
+			</line>
+			<line>
+				<plain>• You chill, warm, or flavor up to 1 cubic foot of nonliving material for 1 hour.</plain>
+			</line>
+			<line>
+				<plain>• You make a color, a small mark, or a symbol appear on an object or a surface for 1 hour.</plain>
+			</line>
+			<line>
+				<plain>• You create a nonmagical trinket or an illusory image that can fit in your hand and that lasts until the end of your next turn.</plain>
+			</line>
+			<line>
+				<plain>If you cast this spell multiple times, you can have up to three of its non-instantaneous effects active at a time, and you can dismiss such an effect as an action.</plain>
+			</line>
+		</description>
+	</spell>
+	<weapon>
+		<name>Dagger</name>
+		<category>Simple Melee</category>
+		<cost>2gp</cost>
+		<damage>1d4 piercing</damage>
+		<weight>1lb</weight>
+		<properties>
+			<property>Finesse</property>
+			<property>Light</property>
+			<property>Thrown (20/60)</property>
+		</properties>
+	</weapon>
+	<weapon>
+		<name>Lance</name>
+		<category>Martial Melee</category>
+		<cost>10gp</cost>
+		<damage>1d12 piercing</damage>
+		<weight>6lb</weight>
+		<properties>
+			<property>Reach</property>
+			<special>You have disadvantage when you use a lance to attack a target within 5 feet of you. Also, a lance requires two hands to wield when you aren’t mounted.</special>
+		</properties>
+	</weapon>
+  </content>
+</source>

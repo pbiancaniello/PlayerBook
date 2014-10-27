@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/parchment.jpg</file>
+        <file>img/blank.png</file>
+        <file>img/parchment.png</file>
+        <file>img/warningIcon.png</file>
+        <file>img/spellBar1.png</file>
+        <file>img/spellBar2.png</file>
+        <file>img/spellDivider1.png</file>
+        <file>img/monsterBar1.png</file>
+        <file>img/monsterBar2.png</file>
+        <file>img/monsterDivider1.png</file>
+        <file>img/monsterDivider2.png</file>
+        <file>img/jace.png</file>
+    </qresource>
+</RCC>

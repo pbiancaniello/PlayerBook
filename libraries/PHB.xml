@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<source>
+  <name>Player's Handbook</name>
+  <content>
+	<race>
+		<id>elf</id>
+		<name>Elf</name>
+		<hasSubraces>yes</hasSubraces>
+		<size>Medium</size>
+		<speed>30</speed>
+		<languages>
+			<language>Common</language>
+			<language>Elvish</language>
+		</languages>
+		<scores>
+			<dex>2</dex>
+		</scores>
+		<features>
+			<feature>
+				<name>Darkvision</name>
+				<description>Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can’t discern color in darkness, only shades of gray.</description>
+				<rules>
+					<rule>darkvision 60</rule>
+				</rules>
+			</feature>
+			<feature>
+				<name>Keen Senses</name>
+				<description>You have proficiency in the Perception skill.</description>
+				<rules>
+					<rule>trainskill perception</rule>
+				</rules>
+			</feature>
+			<feature>
+				<name>Fey Ancestry</name>
+				<description>You have advantage on saving throws against being charmed, and magic can't put you to sleep.</description>
+			</feature>
+			<feature>
+				<name>Trance</name>
+				<description>Elves don’t need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is “trance.”) While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.</description>
+			</feature>
+		</features>
+		<subRaces>
+			<subRace>
+				<id>highelf</id>
+				<name>High Elf</name>
+				<scores>
+					<int>1</int>
+				</scores>
+				<features>
+					<feature>
+						<name>Elf Weapon Training</name>
+						<description>You have proficiency with the longsword, shortsword, shortbow, and longbow.</description>
+						<rules>
+							<rule>trainweapon longsword</rule>
+							<rule>trainweapon shortsword</rule>
+							<rule>trainweapon longbow</rule>
+							<rule>trainweapon shortbow</rule>
+						</rules>
+					</feature>
+					<feature>
+						<name>Cantrip</name>
+						<description>You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it.</description>
+						<rules>
+							<rule>addspell wizard cantrip</rule>
+						</rules>
+					</feature>
+					<feature>
+						<name>Extra Language</name>
+						<description>You can speak, read, and write one extra language of your choice.</description>
+						<rules>
+							<rule>addlanguage choice (any)</rule>
+						</rules>
+					</feature>
+				</features>
+			</subRace>
+			<subRace>
+				<id>woodelf</id>
+				<name>Wood Elf</name>
+				<scores>
+					<wis>1</wis>
+				</scores>
+				<features>
+					<feature>
+						<name>Elf Weapon Training</name>
+						<description>You have proficiency with the longsword, shortsword, shortbow, and longbow.</description>
+						<rules>
+							<rule>trainweapon longsword</rule>
+							<rule>trainweapon shortsword</rule>
+							<rule>trainweapon longbow</rule>
+							<rule>trainweapon shortbow</rule>
+						</rules>
+					</feature>
+					<feature>
+						<name>Fleet of Foot</name>
+						<description>Your base walking speed increases to 35 feet.</description>
+						<rules>
+							<rule>setspeed 35</rule>
+						</rules>
+					</feature>
+					<feature>
+						<name>Mask of the Wild</name>
+						<description>You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena.</description>
+					</feature>
+				</features>
+			</subRace>
+			<subRace>
+				<id>darkelf</id>
+				<name>Dark Elf</name>
+				<scores>
+					<cha>1</cha>
+				</scores>
+				<features>
+					<feature>
+						<name>Superior Darkvision</name>
+						<description>Your darkvision has a radius of 120 feet.</description>
+						<rules>
+							<rule>darkvision 120</rule>
+						</rules>
+					</feature>
+					<feature>
+						<name>Sunlight Sensitivity</name>
+						<description>You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.</description>
+					</feature>
+					<feature>
+						<name>Drow Magic</name>
+						<description>You know the dancing lights cantrip. When you reach 3rd level, you can cast the faerie fire spell once per day. When you reach 5th level, you can also cast the darkness spell once per day. Charisma is your spellcasting ability for these spells.</description>
+						<rules>
+							<rule>addspell wizard cantrip</rule>
+						</rules>
+					</feature>
+					<feature>
+						<name>Drow Weapon Training</name>
+						<description>You have proficiency with rapiers, shortswords, and hand crossbows.</description>
+						<rules>
+							<rule>trainweapon rapier</rule>
+							<rule>trainweapon shortsword</rule>
+							<rule>trainweapon handCrossbow</rule>
+						</rules>
+					</feature>
+				</features>
+			</subRace>
+		</subRaces>
+	</race>
+	<spell>
+		<name></name>
+		<level></level>
+		<school></school>
+		<casttime></casttime>
+		<range></range>
+		<comps></comps>
+		<duration></duration>
+		<description>
+			<line>
+				<plain></plain>
+				<bold></bold>
+				<italic></italic>
+				<bolditalic></bolditalic>
+			</line>
+		</description>
+	</spell>
+	<weapon>
+		<name></name>
+		<category></category>
+		<cost></cost>
+		<damage></damage>
+		<weight></weight>
+		<properties>
+			<property></property>
+			<special></special>
+		</properties>
+	</weapon>
+  </content>
+</source>
