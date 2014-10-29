@@ -2,8 +2,7 @@
 
 Feature::Feature(QObject *parent) :
     QObject(parent){
-    name = "TESTING";
-    bonuses.append("addspell|mage hand");
+    choices = new ContentList();
 }
 
 QString Feature::getSource() const{
@@ -53,21 +52,9 @@ bool Feature::addToBonuses(QString bonus){
     return true;
 }
 
-QMap<QString,QString> Feature::getChoiceMap() const{
-    return choiceMap;
+ContentList* Feature::getChoices() const{
+    return choices;
 }
-QStringList Feature::getChoices() const{
-    return choiceMap.keys();
-}
-QStringList Feature::getEffects() const{
-    return choiceMap.values();
-}
-bool Feature::addToChoiceMap(QString choice, QString effect){
-    choiceMap.insert(choice, effect);
-    emit choicesChanged();
-    emit effectsChanged();
-    return true; //for now
-}
-QString Feature::getEffect(QString choice) const{
-    return choiceMap[choice];
+void Feature::addToChoices(Choice* choice){
+    choices->addContent(choice);
 }

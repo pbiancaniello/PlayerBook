@@ -3,11 +3,13 @@
 Character::Character(QObject *parent) :
     QObject(parent)
 {
-    name = "Jace";
+    name = "Jace Beleren";
     race = "Human";
-    subRace = "";
+    subrace = "";
     charClass = "Wizard";
+    level = 8;
     spells = new ContentList();
+    extraSpells = new ContentList();
     features = new ContentList();
 }
 
@@ -15,11 +17,44 @@ void Character::setDatabase(Database* d){
     database = d;
 }
 
-QString Character::getName(){
+QString Character::getName() const{
     return name;
 }
 void Character::setName(QString newName){
     name = newName;
+    emit nameChanged();
+}
+
+QString Character::getRace() const{
+    return race;
+}
+void Character::setRace(QString newRace){
+    race = newRace;
+    emit raceChanged();
+}
+
+QString Character::getSubrace() const{
+    return subrace;
+}
+void Character::setSubrace(QString newSubrace){
+    subrace = newSubrace;
+    emit subraceChanged();
+}
+
+QString Character::getCharClass() const{
+    return charClass;
+}
+void Character::setCharClass(QString newCharClass){
+    charClass = newCharClass;
+    emit charClassChanged();
+}
+
+int Character::getLevel() const{
+    return level;
+}
+void Character::setLevel(int newLevel){
+    level = newLevel;
+    emit levelChanged();
 }
 
 void Character::addFeature(Feature* feature){
@@ -39,7 +74,8 @@ bool Character::addEffect(QString effect){
         if(params[0]=="addspell"){
             int i = database->getSpells()->containsSpell(params[1]);
             if(i>=0){
-                spells->addContent(database->getSpells()->get(i));
+                //spells->addContent(database->getSpells()->get(i));
+                extraSpells->addContent(database->getSpells()->get(i));
                 return true;
             }
             return false;
@@ -54,8 +90,25 @@ bool Character::addEffect(QString effect){
 }
 
 bool Character::removeEffect(QString effect){
-    return effect.isNull();
-    //return true;
+    QStringList params = effect.toLower().split("|");
+    if(params.size()==1){
+        return true;
+    } else if(params.size()==2){
+        if(params[0]=="addspell"){
+            int i = extraSpells->containsSpell(params[1]);
+            if(i>=0){
+                extraSpells->remove(extraSpells->containsSpell(params[1]));
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+    else if(params.size()==3){
+        return true;
+    } else {
+        return false;
+    }
 }
 
 ContentList* Character::getFeatures() const{
@@ -64,6 +117,10 @@ ContentList* Character::getFeatures() const{
 
 ContentList* Character::getSpells() const{
     return spells;
+}
+
+ContentList* Character::getExtraSpells() const{
+    return extraSpells;
 }
 
 void Character::readCharacter() {

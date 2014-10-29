@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     ditem.cpp \
     feat.cpp \
     level.cpp \
-    contentlist.cpp
+    contentlist.cpp \
+    choice.cpp
 
 RESOURCES += qml.qrc \
     Images.qrc \
@@ -37,4 +38,5 @@ HEADERS += \
     ditem.h \
     feat.h \
     level.h \
-    contentlist.h
+    contentlist.h \
+    choice.h

@@ -1,3 +1,11 @@
+/*
+ * Spell
+ *
+ * A Spell is a QObject that is used to represent spells that a character or
+ * monster might cast.
+ *
+*/
+
 #ifndef SPELL_H
 #define SPELL_H
 

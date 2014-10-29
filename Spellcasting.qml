@@ -54,6 +54,33 @@ Item {
                         }
                 }
             }
+            RowLayout {
+                TableView {
+                    id: playerExtraSpellTable
+                    model: character.extraSpells.list
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    anchors.fill: parent
+                    TableViewColumn {
+                        role: "name"
+                        title: "Name"
+                        width: 80
+                        //resizable: false
+                        //movable: false
+                    }
+                    on__CurrentRowItemChanged: {
+                        if(currentRow>=0&&rowCount>0){
+                            removeSpellButton.enabled = true
+                            spellView.spell = character.extraSpells.get(currentRow)
+                        }
+                    }
+                    onRowCountChanged:{
+                        if(rowCount<1&&playerSpellTable.rowCount<1){
+                            spellView.spell = null
+                        }
+                    }
+                }
+            }
             Window {
                 id: addSpellWindow
                 title: "Spell Database"
@@ -117,27 +144,6 @@ Item {
                         if(playerSpellTable.currentRow>=0){
                             character.spells.remove(playerSpellTable.currentRow)
                             //enabled = false
-                        }
-                    }
-                }
-                Window{
-                    id: testSpellViewWindow
-                    visible: false
-                    minimumWidth: 360
-                    minimumHeight: 300
-                    maximumWidth: minimumWidth
-                    maximumHeight: minimumHeight
-                    SpellViewer{
-                        id: testSpellView
-                    }
-                }
-                Button {
-                    text: "Test spell viewer"
-                    Layout.fillWidth: true
-                    onClicked: {
-                        if(playerSpellTable.currentRow>=0){
-                            testSpellView.spell = character.spells.get(playerSpellTable.currentRow)
-                            testSpellViewWindow.visible = true
                         }
                     }
                 }
