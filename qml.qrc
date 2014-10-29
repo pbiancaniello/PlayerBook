@@ -11,5 +11,6 @@
         <file>SpellViewer.qml</file>
         <file>MonsterViewer.qml</file>
         <file>Features.qml</file>
+        <file>FeatureViewer.qml</file>
     </qresource>
 </RCC>

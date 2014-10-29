@@ -105,14 +105,42 @@ Item {
     }
     Rectangle {
         id: scoreSelection
-        visible: false
+        visible: true
         width: 500
         height: 400
         color: "#3d52de"
-        //anchors.fill: parent
+        Item{
+            id: helper
+            function getCost(v){
+                if (v<=8){
+                    return 0
+                } else if(v==9){
+                    return 1
+                } else if (v==10){
+                    return 2
+                } else if (v==11){
+                    return 3
+                } else if (v==12){
+                    return 4
+                } else if (v==13){
+                    return 5
+                } else if (v==14){
+                    return 7
+                } else{ //15 or higher
+                    return 9
+                }
+            }
+
+        }
         Text{
             text: "Please enter your ability scores"
         }
+        Text{
+            x: 225
+            y: 79
+            text: 27-p_str.cost-p_dex.cost-p_con.cost-p_int.cost-p_wis.cost-p_cha.cost
+        }
+
         Text {
             x: 119
             y: 119
@@ -121,10 +149,12 @@ Item {
         }
         SpinBox {
             id: p_str
+            property int cost: 0
             x: 112
             y: 144
             minimumValue: 0
-            value: 0
+            value: 8
+            onValueChanged: cost = helper.getCost(value)
         }
         Text {
             x: 159
@@ -134,10 +164,12 @@ Item {
         }
         SpinBox {
             id: p_dex
+            property int cost: 0
             x: 152
             y: 144
             minimumValue: 0
-            value: 0
+            value: 8
+            onValueChanged: cost = helper.getCost(value)
         }
         Text {
             x: 199
@@ -147,10 +179,12 @@ Item {
         }
         SpinBox {
             id: p_con
+            property int cost: 0
             x: 193
             y: 144
             minimumValue: 0
-            value: 0
+            value: 8
+            onValueChanged: cost = helper.getCost(value)
         }
         Text {
             x: 241
@@ -160,10 +194,12 @@ Item {
         }
         SpinBox {
             id: p_int
+            property int cost: 0
             x: 234
             y: 144
             minimumValue: 0
-            value: 0
+            value: 8
+            onValueChanged: cost = helper.getCost(value)
         }
         Text {
             x: 282
@@ -173,10 +209,12 @@ Item {
         }
         SpinBox {
             id: p_wis
+            property int cost: 0
             x: 275
             y: 144
             minimumValue: 0
-            value: 0
+            value: 8
+            onValueChanged: cost = helper.getCost(value)
         }
         Text {
             x: 323
@@ -186,10 +224,12 @@ Item {
         }
         SpinBox {
             id: p_cha
+            property int cost: 0
             x: 316
             y: 144
             minimumValue: 0
-            value: 0
+            value: 8
+            onValueChanged: cost = helper.getCost(value)
         }
         Button{
             text: "Next"

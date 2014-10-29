@@ -1,3 +1,11 @@
+/*
+ * Feature
+ *
+ * A Feature is a QObject that is used to represent the features that are granted
+ * to a character by their race and class(es).
+ *
+*/
+
 #ifndef FEATURE_H
 #define FEATURE_H
 
@@ -6,6 +14,9 @@
 #include <QMap>
 #include <QStringList>
 
+#include "contentlist.h"
+#include "choice.h"
+
 class Feature : public QObject
 {
     Q_OBJECT
@@ -13,8 +24,7 @@ class Feature : public QObject
     Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QStringList desc READ getDesc NOTIFY descChanged)
     Q_PROPERTY(QStringList bonuses READ getBonuses NOTIFY bonusesChanged)
-    Q_PROPERTY(QStringList choices READ getChoices NOTIFY choicesChanged)
-    Q_PROPERTY(QStringList effects READ getEffects NOTIFY effectsChanged)
+    Q_PROPERTY(ContentList* choices READ getChoices NOTIFY choicesChanged)
 public:
     explicit Feature(QObject *parent = 0);
 
@@ -30,15 +40,8 @@ public:
     QStringList getBonuses() const;
     bool addToBonuses(QString bonus);
 
-    QMap<QString,QString> getChoiceMap() const;
-    QStringList getChoices() const;
-    QStringList getEffects() const;
-    bool addToChoiceMap(QString choice, QString effect);
-    Q_INVOKABLE QString getEffect(QString choice) const;
-
-    /*QStringList getChoices() const;
-    bool addToChoices(QString choice);*/
-
+    ContentList* getChoices() const;
+    void addToChoices(Choice* choice);
 
 signals:
     void sourceChanged();
@@ -46,13 +49,11 @@ signals:
     void descChanged();
     void bonusesChanged();
     void choicesChanged();
-    void effectsChanged();
 
 private:
     QString source, name;
-    QStringList desc, bonuses;//, choices, effects;
-    QMap<QString,QString> choiceMap; //Map list of choices to effects (spell, feature, bonus etc.)
-    //QList<QMap<QString,QString>> temp;
+    QStringList desc, bonuses;
+    ContentList* choices;
 
 };
 

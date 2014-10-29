@@ -1,3 +1,13 @@
+/*
+ * ContentList
+ *
+ * A ContentList is a QObject that is used as a wrapper for lists of custom
+ * objects. Rather than have separate QQmlListProperty instances and methods
+ * to interact with them for each separate list of custom QObjects in classes
+ * like Database and Character only a ContentList is needed.
+ *
+*/
+
 #ifndef CONTENTLIST_H
 #define CONTENTLIST_H
 
@@ -7,7 +17,7 @@
 #include <stdlib.h>
 #include <iostream>
 
-#include "feature.h"
+//#include "feature.h"
 #include "monster.h"
 #include "spell.h"
 

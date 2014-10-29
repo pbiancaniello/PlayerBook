@@ -1,3 +1,11 @@
+/*
+ * Monster
+ *
+ * A Monster is a QObject that is used to represent monsters that a player might
+ * have as companions or be capable of transforming into.
+ *
+*/
+
 #ifndef MONSTER_H
 #define MONSTER_H
 

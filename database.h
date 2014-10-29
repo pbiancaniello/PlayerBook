@@ -1,11 +1,27 @@
+/*
+ * Database
+ *
+ * A Database is a QObject that is used both as a container for all content
+ * (monsters, spells, races, etc...) and to parse it from xml documents.
+ *
+ * Current tasks that require fairly urgent attention are:
+ *
+ * Parse order - Have to decide on how to deal with potentially parsing
+ * content with certain dependencies before those dependencies i.e a
+ * subrace before a race
+ *
+ * Folder parsing - Have to figure out what the process is for parsing
+ * the entirety of a given folder
+ *
+*/
+
 #ifndef DATABASE_H
 #define DATABASE_H
 
 #include <iostream>
 
 #include "contentlist.h"
-//#include "monster.h"
-//#include "spell.h"
+#include "feature.h"
 
 #include <QObject>
 #include <QXmlStreamReader>

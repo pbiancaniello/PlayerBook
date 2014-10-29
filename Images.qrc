@@ -12,5 +12,7 @@
         <file>img/monsterDivider1.png</file>
         <file>img/monsterDivider2.png</file>
         <file>img/jace.png</file>
+        <file>img/featureBar1.png</file>
+        <file>img/featureBar2.png</file>
     </qresource>
 </RCC>
