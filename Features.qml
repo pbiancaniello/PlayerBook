@@ -40,6 +40,13 @@ Item {
                         //resizable: false
                         //movable: false
                     }
+                    TableViewColumn {
+                        role: "source"
+                        title: "Source"
+                        //width: 80
+                        //resizable: false
+                        //movable: false
+                    }
                     on__CurrentRowItemChanged: {
                         if(currentRow>=0&&rowCount>0){
                             //removeSpellButton.enabled = true

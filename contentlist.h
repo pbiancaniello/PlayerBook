@@ -17,8 +17,8 @@
 #include <stdlib.h>
 #include <iostream>
 
-//#include "feature.h"
 #include "monster.h"
+//#include "race.h"
 #include "spell.h"
 
 class ContentList : public QObject
@@ -32,10 +32,13 @@ public:
     Q_INVOKABLE QObject* get(int i);
     Q_INVOKABLE bool contains(QObject* o);
     Q_INVOKABLE int containsMonster(QString s);
+    //Q_INVOKABLE int containsRace(QString s);
     Q_INVOKABLE int containsSpell(QString s);
     Q_INVOKABLE void remove(int i);
     Q_INVOKABLE void clear();
+    Q_INVOKABLE int length();
     //Q_INVOKABLE void sort();
+    //QList<QObject*> list;
 
 signals:
     void listChanged();

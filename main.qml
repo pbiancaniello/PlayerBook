@@ -16,6 +16,8 @@ ApplicationWindow {
     //color: "#ffffff"
     title: "PlayerBook"
 
+    property Character character: base
+
     Window {
         id: errors
         title: "Parsing Errors"
@@ -91,21 +93,17 @@ ApplicationWindow {
                 errors.close()
             }
         }
-
     }
 
     Window {
         id: init
-        visible: false
+        property bool control: false
+        visible: true
         modality: Qt.ApplicationModal
         minimumWidth: 500
         minimumHeight: 400
         maximumWidth: minimumWidth
         maximumHeight: minimumHeight
-        Text{
-            id: controlText
-            visible: false
-        }
         ColumnLayout{
             Text{
                 id: displayText
@@ -113,17 +111,13 @@ ApplicationWindow {
             }
             Button{
                 text: "Create new character."
-                onClicked: {
-                    //controlText.visible=true
-                    //init.visible = false
-                    newCharWindow.visible = true
-                }
+                onClicked: newCharWindow.visible = true
             }
             Button{
-                text: "Load existing character..."
+                text: "Load existing character...(closes window for now)"
                 onClicked: {
-                    controlText.visible=true
-                    init.visible = false
+                    init.control = true
+                    init.close()
                 }
             }
             Button{
@@ -135,13 +129,24 @@ ApplicationWindow {
             id: newCharWindow
             visible: false
             anchors.fill: parent
+            onVisibleChanged: {
+                if(visible==false&&complete==true){
+                    init.control = true
+                    init.close()
+                }
+            }
         }
         onVisibilityChanged: {
-            if (visible==false&&controlText.visible==false){
+            if (visible==false&&init.control==false){
                 Qt.quit()
             }
         }
 
+    }
+
+    Character{
+        id: test
+        name: "TEST"
     }
 
     menuBar: MenuBar {
@@ -149,7 +154,14 @@ ApplicationWindow {
             title: qsTr("File")
             MenuItem {
                 text: qsTr("&Open")
-                onTriggered: console.log("Open action triggered");
+                onTriggered: {
+                    console.log("Open action triggered");
+                    //console.log(serialize(test))
+                    //charTab.chara = test
+                    //charTab.children[0].chara = test
+                    character = test
+                    character.saveCharacter()
+                }
             }
             MenuItem {
                 text: qsTr("Exit")
@@ -159,30 +171,32 @@ ApplicationWindow {
     }
 
     TabView {
-            anchors.fill: parent
-            Tab {
-                title: "Character"
-                Character { anchors.fill:parent }
-            }
-            Tab {
-                title: "Inventory"
-                Inventory { anchors.fill:parent }
-            }           
-            Tab {
-                title: "Features"
-                Features { anchors.fill: parent }
-            }
-            Tab {
-                title: "Spellcasting"
-                Spellcasting { anchors.fill: parent }
-            }
-            Tab {
-                title: "Beastiary"
-                Beastiary { anchors.fill:parent }
-            }
-            Tab {
-                title: "Actions"
-                Actions { anchors.fill:parent }
+        anchors.fill: parent
+        Tab {
+            title: "Character"
+            CharacterTab {
+                anchors.fill:parent
             }
         }
+        Tab {
+            title: "Inventory"
+            Inventory { anchors.fill:parent }
+        }
+        Tab {
+            title: "Features"
+            Features { anchors.fill: parent }
+        }
+        Tab {
+            title: "Spellcasting"
+            Spellcasting { anchors.fill: parent }
+        }
+        Tab {
+            title: "Beastiary"
+            Beastiary { anchors.fill:parent }
+        }
+        Tab {
+            title: "Actions"
+            Actions { anchors.fill:parent }
+        }
+    }
 }

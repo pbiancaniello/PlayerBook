@@ -3,6 +3,8 @@
 Database::Database(QObject *parent) :
     QObject(parent){
     monsters = new ContentList();
+    //races = new ContentList();
+    //races = new QList<Race*>();
     spells = new ContentList();
     tagType = "temp";
 }
@@ -11,12 +13,34 @@ ContentList* Database::getMonsters() const{
     return monsters;
 }
 
+/*ContentList* Database::getRaces() const{
+    return races;
+}*/
+QQmlListProperty<Race> Database::getRaces(){
+    return QQmlListProperty<Race>(this, races);
+}
+Race* Database::getRace(int i){
+    return races.at(i);
+}
+
 ContentList* Database::getSpells() const{
     return spells;
 }
 
 QStringList Database::getSpellList() const{
     return spellList;
+}
+
+QStringList Database::getRitualList() const{
+    return ritualList;
+}
+
+QStringList Database::getLangList() const{
+    return langList;
+}
+
+bool Database::containsClass(QString c) const{
+    return classList.contains(c);
 }
 
 QStringList Database::getErrorLog() const{
@@ -41,7 +65,18 @@ bool Database::loopCheck(QString currentTag){
 }
 
 void Database::buildDatabase(){
-    QFile* file = new QFile(":/libraries/MM.xml");
+    QDir dir(":/libraries");
+    dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
+    QStringList list = dir.entryList();
+    for(int i=0; i<list.length(); i++){
+        //addError(list.at(i));
+        parseFile(dir.path()+"/"+list.at(i));
+        //addError(dir.path()+"/"+list.at(i));
+    }
+}
+
+bool Database::parseFile(QString filename){
+    QFile* file = new QFile(filename);
         // If we can't open it, let's show an error message.
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) {
             std::cerr << "Couldn't open file";
@@ -51,20 +86,19 @@ void Database::buildDatabase(){
         // QXmlStreamReader takes any QIODevice.
     QXmlStreamReader newXml(file);
     xml = &newXml;
-        // We'll parse the XML until we reach end of it.
-    if (!xml->atEnd()) {
+
+    if (!xml->atEnd()){ //We'll parse the XML until we reach end of it.
         if(xml->readNext() == QXmlStreamReader::StartDocument) { //1st line
-            //std::cerr << "1" << xml->name().toString().toStdString();
             if(xml->readNext() == QXmlStreamReader::StartElement) { //source
-                //std::cerr << "2" << xml->name().toString().toStdString();
                 while(xml->name().toString()!="name"){
                     xml->readNext();
                     if(xml->tokenType()==QXmlStreamReader::EndDocument){
                         std::cerr << "Unexpected end of document";
-                        break;
+                        return -1;
                     }
                 }
                 QString source = xml->readElementText();
+                //std::cerr << source.toStdString() << "\n";
                 while(xml->name().toString()!="content"){
                     xml->readNext();
                     if(xml->tokenType()==QXmlStreamReader::EndDocument){
@@ -83,12 +117,32 @@ void Database::buildDatabase(){
                             break;
                         }
                         tagType = type;*/
+                        if(type=="feat"){
+                            std::cerr << "FEATTTTTTT\n";
+                        }
+                        if(type=="language"){ //Now at open language tag
+                            QString lang = xml->readElementText();
+                            if(langList.contains(lang)){
+                                addError("Duplicate language entry in "+source+": "+lang);
+
+                            } else{
+                                langList.append(lang);
+                            }
+                        }
                         if(type=="monster"){ //Now at open monster tag
                             Monster* m = new Monster();
                             m->setSource(source);
                             if(buildMonster(m)){
                                 monsters->addContent(m);
                                 emit monstersChanged();
+                            }
+                        }
+                        if(type=="race"){ //Now at open race tag
+                            Race* r = new Race();
+                            r->setSource(source);
+                            if(buildRace(r)){
+                                races.append(r);
+                                emit racesChanged();
                             }
                         }
                         if(type=="spell"){ //Now at open spell tag
@@ -99,6 +153,15 @@ void Database::buildDatabase(){
                                 emit spellsChanged();
                                 spellList.append(s->getName().toLower());
                                 emit spellListChanged();
+                            }
+                        }
+                        if(type=="subrace"){ //Now at open subrace tag
+                            Race* r = new Race();
+                            r->setSource(source);
+                            if(buildSubrace(r)){
+                                //races.append(r);
+                                //emit racesChanged();
+                                std::cerr << "Subrace " << r->getName().toStdString() << " parsed.\n";
                             }
                         }
                     }
@@ -485,6 +548,250 @@ bool Database::buildMonster(Monster* m){
     return true;
 }
 
+bool Database::buildRace(Race* r){
+    QString error = "In source "+r->getSource()+" while parsing a race: ";
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="name"){ //should be at name tag
+        r->setName(xml->readElementText());
+        error += r->getName()+" has ";
+        /*for(int i=0; i<races.length(); i++){
+            if(races.at(i)->getName()==r->getName()){
+                addError(error+"a duplicate entry");
+                return false;
+            }
+        }*///Currently disabled for the sake of human variant
+    } else{
+        addError(error+"an improper tag order and/or a missing name tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="desc"){ //should be at description
+        xml->readNext();
+        xml->readNext();
+        while(xml->name().toString()!="desc"){ //loop until description end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a line end tag somewhere.");
+                break;
+            }
+            tagType = type;*/
+            if(xml->name().toString()=="line"){ //we are at a line
+                xml->readNext();
+                xml->readNext();
+                QString line = "";
+                while(xml->name().toString()!="line"){ //loop until line end tag
+                    if(xml->name().toString()=="plain"){
+                        line+=xml->readElementText();
+                    } else if (xml->name().toString()=="bold"){
+                        line+="<b>"+xml->readElementText()+"</b>";
+                    } else if (xml->name().toString()=="italic"){
+                        line+="<i>"+xml->readElementText()+"</i>";
+                    } else if (xml->name().toString()=="bolditalic"){
+                        line+="<b><i>"+xml->readElementText()+"</b></i>";
+                    } else{
+                        addError(error+"has improper formatting in its description");
+                        return false;
+                    }
+                    xml->readNext();
+                    xml->readNext();
+                }
+                r->addToDesc(line);
+            } else{
+                addError(error+"has improper formatting in its desc");
+                return false;
+            }
+            xml->readNext();
+            xml->readNext();
+        }
+    } else{
+        addError(error+"an improper tag order and/or a missing desc tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="size"){ //should be at size
+        r->setSize(xml->readElementText());
+    } else{
+        addError(error+"an improper tag order and/or a missing size tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="speed"){ //should be at size
+        r->setSpeed(xml->readElementText());
+    } else{
+        addError(error+"an improper tag order and/or a missing speed tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="languages"){ //should be at languages
+        xml->readNext();
+        xml->readNext();
+        while(xml->name().toString()!="languages"){ //loop until languages end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a line end tag somewhere.");
+                break;
+            }
+            tagType = type;*/
+            if(xml->name().toString()=="language"){ //we are at a language
+                r->addToLangs(xml->readElementText());
+                //std::cerr << r->getLangs().at(0).toStdString();
+            }
+            if(xml->name().toString()=="choice"){ //we are at a language choice
+                QStringList qsl = xml->readElementText().split(",");
+                if(qsl.length()>1){ //we have a list of choices
+                    Choice* c = new Choice();
+                    c->setDesc("Choose a language:");
+                    for(int i=0; i<qsl.length(); i++){
+                        c->add(qsl.at(i),"addlanguage|"+qsl.at(i));
+                    }
+                    r->getChoices()->addContent(c);
+                } else{ //we should have a choice of any
+                    if(qsl.at(0)=="any"){
+                        Choice* c = new Choice();
+                        c->setDesc("Choose a language:");
+                        for(int i=0; i<langList.length(); i++){
+                            c->add(langList.at(i),"addlanguage|"+langList.at(i));
+                        }
+                        r->getChoices()->addContent(c);
+                    } else{
+                        addError(error+"an incorrectly formatted language choice");
+                        return false;
+                    }
+                }
+            }
+            xml->readNext();
+            xml->readNext();
+        }
+    } else{
+        addError(error+"an improper tag order and/or a missing languages tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="scores"){ //should be at scores
+        xml->readNext();
+        xml->readNext();
+        while(xml->name().toString()!="scores"){ //loop until languages end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a line end tag somewhere.");
+                break;
+            }
+            tagType = type;*/
+            if(xml->name().toString()=="bonus"){ //we are at a bonus
+                QStringList qsl = xml->readElementText().split(" ");
+                if(qsl.length()==2){
+                    int b = qsl.at(1).toInt();
+                    if(b<1){
+                        addError(error+"an incorrectly formatted score bonus");
+                        return false;
+                    }
+                    if(qsl.at(0).toLower()=="str"){
+                        r->setScore(0,b);
+                    }
+                    if(qsl.at(0).toLower()=="dex"){
+                        r->setScore(1,b);
+                    }
+                    if(qsl.at(0).toLower()=="con"){
+                        r->setScore(2,b);
+                    }
+                    if(qsl.at(0).toLower()=="int"){
+                        r->setScore(3,b);
+                    }
+                    if(qsl.at(0).toLower()=="wis"){
+                        r->setScore(4,b);
+                    }
+                    if(qsl.at(0).toLower()=="cha"){
+                        r->setScore(5,b);
+                    }
+                } else{
+                    addError(error+"an incorrectly formatted score bonus");
+                    return false;
+                }
+            }
+            if(xml->name().toString()=="choice"){ //we are at a score choice
+                QStringList qsl = xml->readElementText().split(" ");
+                if(qsl.length()==2){ //we have proper formatting
+                    if(qsl.at(1).toInt()<1){
+                        addError(error+"an incorrectly formatted score choice");
+                        return false;
+                    }
+                    QString b = qsl.at(1);
+                    //std::cerr << b.to << "\n";
+                    if(qsl.at(0).split(",").length()==1){ //should be at any
+                        if(qsl.at(0).toLower()=="any"){
+                            Choice* c = new Choice();
+                            c->setDesc("Choose an ability score to increase by "+b+":");
+                            c->add("Strength","incrSTR|"+b);
+                            c->add("Dexterity","incrDEX|"+b);
+                            c->add("Constitution","incrCON|"+b);
+                            c->add("Intelligence","incrINT|"+b);
+                            c->add("Wisdom","incrWIS|"+b);
+                            c->add("Charisma","incrCHA|"+b);
+                            r->getChoices()->addContent(c);
+                        } else{
+                            addError(error+"an incorrectly formatted score choice");
+                            return false;
+                        }
+                    } else{ //we should have a selection of scores
+                        Choice* c = new Choice();
+                        c->setDesc("Choose an ability score to increase by "+b+":");
+                        QStringList scores = qsl.at(0).split(",");
+                        for(int i=0; i<scores.length(); i++){
+                            QString score = scores.at(i);
+                            c->add(score.toUpper(),"incr"+score.toUpper()+"|"+b);
+                        }
+                        r->getChoices()->addContent(c);
+                    }
+                } else{
+                    addError(error+"an incorrectly formatted score choice");
+                    return false;
+                }
+            }
+            xml->readNext();
+            xml->readNext();
+        }
+    } else{
+        addError(error+"an improper tag order and/or a missing scores tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="features"){ //might be at features
+        xml->readNext();
+        xml->readNext();
+        while(xml->name().toString()!="features"){ //loop until features end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a line end tag somewhere.");
+                break;
+            }
+            tagType = type;*/
+            if(xml->name().toString()=="feature"){ //we are at a feature
+                Feature* f = new Feature();
+                f->setSource(r->getName());
+                if(buildFeature(f)){
+                    r->getFeatures()->addContent(f);
+                } else{
+                    addError(error+"an improperly formatted feature.");
+                    return false;
+                }
+            }
+            xml->readNext();
+            xml->readNext();
+        }
+    } /*else{
+        addError(error+"an improper tag order and/or a missing features tag");
+        return false;
+    }*/
+    return true;
+}
+
 bool Database::buildSpell(Spell* s){
     QString error = "In source "+s->getSource()+" while parsing a spell: ";
     xml->readNext();
@@ -492,7 +799,8 @@ bool Database::buildSpell(Spell* s){
     if(xml->name().toString()=="name"){ //should be at name
         s->setName(xml->readElementText());
         error += s->getName()+" has ";
-        if(spells->containsSpell(s->getName().toLower())>=0){
+        //std::cerr << s->getName().toStdString()+"\n";
+        if(spells->containsSpell(s->getName())>=0){
             addError(error+"a duplicate entry");
             return false;
         }
@@ -512,6 +820,9 @@ bool Database::buildSpell(Spell* s){
     xml->readNext();
     if(xml->name().toString()=="school"){ //should be at school
         s->setSchool(xml->readElementText());
+        if(s->getSchool().split(" ").size()>1){
+            ritualList.append(s->getName());
+        }
     } else{
         addError(error+"an improper tag order and/or a missing school tag");
         return false;
@@ -550,10 +861,10 @@ bool Database::buildSpell(Spell* s){
     }
     xml->readNext();
     xml->readNext();
-    if(xml->name().toString()=="description"){ //should be at description
+    if(xml->name().toString()=="desc"){ //should be at description
         xml->readNext();
         xml->readNext();
-        while(xml->name().toString()!="description"){ //loop until description end tag
+        while(xml->name().toString()!="desc"){ //loop until description end tag
             /*QString type = xml->name().toString();
             if(!loopCheck(type)){
                 addError(error+"is missing a line end tag somewhere.");
@@ -582,6 +893,83 @@ bool Database::buildSpell(Spell* s){
                 }
                 s->addToDesc(line);
             } else{
+                addError(error+"has improper formatting in its desc");
+                return false;
+            }
+            xml->readNext();
+            xml->readNext();
+        }
+    } else{
+        addError(error+"an improper tag order and/or a missing desc tag");
+        return false;
+    }
+    return true;
+}
+
+bool Database::buildSubrace(Race* r){
+    QString error = "In source "+r->getSource()+" while parsing a subrace: ";
+    Race* parent;
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="name"){ //should be at name tag
+        r->setName(xml->readElementText());
+        error += r->getName()+" has ";
+    } else{
+        addError(error+"an improper tag order and/or a missing name tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="parent"){ //should be at parent tag
+        QString parentName = xml->readElementText();
+        for(int i=0; i<races.length(); i++){
+            if(races.at(i)->getName()==parentName){
+                parent = races.at(i);
+                parentName = "";
+            }
+        }
+        if(parentName!=""){
+            addError(error+"a parent that isn't in the database. Check spelling and file parse order.");
+            return false;
+        }
+    } else{
+        addError(error+"an improper tag order and/or a missing parent tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="desc"){ //should be at description
+        xml->readNext();
+        xml->readNext();
+        while(xml->name().toString()!="desc"){ //loop until description end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a line end tag somewhere.");
+                break;
+            }
+            tagType = type;*/
+            if(xml->name().toString()=="line"){ //we are at a line
+                xml->readNext();
+                xml->readNext();
+                QString line = "";
+                while(xml->name().toString()!="line"){ //loop until line end tag
+                    if(xml->name().toString()=="plain"){
+                        line+=xml->readElementText();
+                    } else if (xml->name().toString()=="bold"){
+                        line+="<b>"+xml->readElementText()+"</b>";
+                    } else if (xml->name().toString()=="italic"){
+                        line+="<i>"+xml->readElementText()+"</i>";
+                    } else if (xml->name().toString()=="bolditalic"){
+                        line+="<b><i>"+xml->readElementText()+"</b></i>";
+                    } else{
+                        addError(error+"has improper formatting in its description");
+                        return false;
+                    }
+                    xml->readNext();
+                    xml->readNext();
+                }
+                r->addToDesc(line);
+            } else{
                 addError(error+"has improper formatting in its description");
                 return false;
             }
@@ -589,8 +977,271 @@ bool Database::buildSpell(Spell* s){
             xml->readNext();
         }
     } else{
-        addError(error+"an improper tag order and/or a missing description tag");
+        addError(error+"an improper tag order and/or a missing desc tag");
         return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="scores"){ //should be at scores
+        xml->readNext();
+        xml->readNext();
+        while(xml->name().toString()!="scores"){ //loop until languages end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a line end tag somewhere.");
+                break;
+            }
+            tagType = type;*/
+            if(xml->name().toString()=="bonus"){ //we are at a bonus
+                QStringList qsl = xml->readElementText().split(" ");
+                if(qsl.length()==2){
+                    int b = qsl.at(1).toInt();
+                    if(b<1){
+                        addError(error+"an incorrectly formatted score bonus");
+                        return false;
+                    }
+                    if(qsl.at(0).toLower()=="str"){
+                        r->setScore(0,b);
+                    }
+                    if(qsl.at(0).toLower()=="dex"){
+                        r->setScore(1,b);
+                    }
+                    if(qsl.at(0).toLower()=="con"){
+                        r->setScore(2,b);
+                    }
+                    if(qsl.at(0).toLower()=="int"){
+                        r->setScore(3,b);
+                    }
+                    if(qsl.at(0).toLower()=="wis"){
+                        r->setScore(4,b);
+                    }
+                    if(qsl.at(0).toLower()=="cha"){
+                        r->setScore(5,b);
+                    }
+                } else{
+                    addError(error+"an incorrectly formatted score bonus");
+                    return false;
+                }
+            }
+            if(xml->name().toString()=="choice"){ //we are at a score choice
+                QStringList qsl = xml->readElementText().split(" ");
+                if(qsl.length()==2){ //we have proper formatting
+                    if(qsl.at(1).toInt()<1){
+                        addError(error+"an incorrectly formatted score choice");
+                        return false;
+                    }
+                    QString b = qsl.at(1);
+                    //std::cerr << b.to << "\n";
+                    if(qsl.at(0).split(",").length()==1){ //should be at any
+                        if(qsl.at(0).toLower()=="any"){
+                            Choice* c = new Choice();
+                            c->setDesc("Choose an ability score to increase by "+b+":");
+                            c->add("Strength","incrSTR|"+b);
+                            c->add("Dexterity","incrDEX|"+b);
+                            c->add("Constitution","incrCON|"+b);
+                            c->add("Intelligence","incrINT|"+b);
+                            c->add("Wisdom","incrWIS|"+b);
+                            c->add("Charisma","incrCHA|"+b);
+                            r->getChoices()->addContent(c);
+                        } else{
+                            addError(error+"an incorrectly formatted score choice");
+                            return false;
+                        }
+                    } else{ //we should have a selection of scores
+                        Choice* c = new Choice();
+                        c->setDesc("Choose an ability score to increase by "+b+":");
+                        QStringList scores = qsl.at(0).split(",");
+                        for(int i=0; i<scores.length(); i++){
+                            QString score = scores.at(i);
+                            c->add(score.toUpper(),"incr"+score.toUpper()+"|"+b);
+                        }
+                        r->getChoices()->addContent(c);
+                    }
+                } else{
+                    addError(error+"an incorrectly formatted score choice");
+                    return false;
+                }
+            }
+            xml->readNext();
+            xml->readNext();
+        }
+    } else{
+        addError(error+"an improper tag order and/or a missing scores tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="features"){ //should be at features
+        xml->readNext();
+        xml->readNext();
+        while(xml->name().toString()!="features"){ //loop until features end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a line end tag somewhere.");
+                break;
+            }
+            tagType = type;*/
+            if(xml->name().toString()=="feature"){ //we are at a feature
+                Feature* f = new Feature();
+                f->setSource(r->getName());
+                if(buildFeature(f)){
+                    r->getFeatures()->addContent(f);
+                } else{
+                    addError(error+"an improperly formatted feature.");
+                    return false;
+                }
+            }
+            xml->readNext();
+            xml->readNext();
+        }
+    } else{
+        addError(error+"an improper tag order and/or a missing features tag");
+        return false;
+    }
+    parent->getSubraces()->addContent(r);
+    return true;
+}
+
+bool Database::buildFeature(Feature* f){
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="name"){ //should be at name
+        QString temp = xml->readElementText();
+        f->setName(temp);
+    } else{
+        addError("A feature is missing a name tag");
+        return false;
+    }
+    QString error = f->getName()+" has ";
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="desc"){ //should be at description
+        xml->readNext();
+        xml->readNext();
+        while(xml->name().toString()!="desc"){ //loop until description end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a line end tag somewhere.");
+                break;
+            }
+            tagType = type;*/
+            if(xml->name().toString()=="line"){ //we are at a line
+                xml->readNext();
+                xml->readNext();
+                QString line = "";
+                while(xml->name().toString()!="line"){ //loop until line end tag
+                    if(xml->name().toString()=="plain"){
+                        line+=xml->readElementText();
+                    } else if (xml->name().toString()=="bold"){
+                        line+="<b>"+xml->readElementText()+"</b>";
+                    } else if (xml->name().toString()=="italic"){
+                        line+="<i>"+xml->readElementText()+"</i>";
+                    } else if (xml->name().toString()=="bolditalic"){
+                        line+="<b><i>"+xml->readElementText()+"</b></i>";
+                    } else{
+                        addError(error+"improper formatting in its description");
+                        return false;
+                    }
+                    xml->readNext();
+                    xml->readNext();
+                }
+                f->addToDesc(line);
+            } else{
+                addError(error+"improper formatting in its description");
+                return false;
+            }
+            xml->readNext();
+            xml->readNext();
+        }
+    } else{
+        addError(error+"an improper tag order and/or a missing desc tag");
+        return false;
+    }
+    xml->readNext();
+    xml->readNext();
+    if(xml->name().toString()=="effects"){ //we may be at effects
+        xml->readNext();
+        xml->readNext();
+        while(xml->name().toString()!="effects"){ //loop until effects end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a line end tag somewhere.");
+                break;
+            }
+            tagType = type;*/
+            if(xml->name().toString()=="effect"){ //we are at an effect
+                f->addToBonuses(xml->readElementText());
+            } else if(xml->name().toString()=="choice"){ //we are at a choice
+                Choice* c = new Choice();
+                if(buildChoice(c,xml->readElementText())){
+                    f->addToChoices(c);
+                } else{
+                    addError(error+"an improperly formatted choice.");
+                    return false;
+                }
+            }
+            xml->readNext();
+            xml->readNext();
+        }
+        xml->readNext();
+        xml->readNext();
+    }
+    return true;
+}
+
+bool Database::buildChoice(Choice* c, QString s){
+    QStringList qsl = s.split("|");
+    if(qsl.length()==2){
+        if(qsl.at(0).toLower()=="addlanguage"){
+            c->setDesc("Choose a language:");
+            if(qsl.at(1)=="any"){
+                for(int i=0; i<langList.length(); i++){
+                    c->add(langList.at(i),"addlanguage|"+langList.at(i));
+                }
+                return true;
+            } else{
+                QStringList langs = qsl.at(1).split(",");
+                if(langs.size()<=1){
+                    return false;
+                }
+                for(int i=0; i<langs.length(); i++){
+                    c->add(langs.at(i),"addlanguage|"+langs.at(i));
+                }
+            }
+        } else if(qsl.at(0).toLower()=="trainskill"){
+            return true;
+        } else if(qsl.at(0).toLower()=="addfeat"){
+            return true;
+        } else if(qsl.at(0).toLower()=="custom"){
+            QStringList choices = qsl.at(1).split("+");
+            for(int i=0; i<choices.length(); i++){
+                QStringList option = choices.at(i).split(",");
+                QString effect = option.at(1);
+                effect.replace(":","|");
+                c->add(option.at(0),effect);
+            }
+            return true;
+        } else{
+            return true;
+        }
+    } else if(qsl.length()==3){
+        if(qsl.at(0).toLower()=="addspell"){
+            return true; //for now
+        } else if(qsl.at(0).toLower()=="custom"){
+            c->setDesc(qsl.at(1));
+            QStringList choices = qsl.at(2).split("+");
+            for(int i=0; i<choices.length(); i++){
+                QStringList option = choices.at(i).split(",");
+                QString effect = option.at(1);
+                effect.replace(":","|");
+                c->add(option.at(0),effect);
+            }
+            return true;
+        } else{
+            return true;
+        }
+    } else{
+        return true;
     }
     return true;
 }

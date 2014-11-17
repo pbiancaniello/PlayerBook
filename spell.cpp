@@ -3,10 +3,6 @@
 Spell::Spell(QObject *parent) :
     QObject(parent){}
 
-QString Spell::objectName() const{
-    return name;
-}
-
 QString Spell::getSource() const{
     return source;
 }

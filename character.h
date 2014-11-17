@@ -24,8 +24,11 @@ class Character : public QObject
     Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(QString race READ getRace WRITE setRace NOTIFY raceChanged)
     Q_PROPERTY(QString subrace READ getSubrace WRITE setSubrace NOTIFY subraceChanged)
-    Q_PROPERTY(QString charClass READ getCharClass WRITE setCharClass NOTIFY charClassChanged)
+    Q_PROPERTY(QString className READ getClassName WRITE setClassName NOTIFY classNameChanged)
+    Q_PROPERTY(QString alignment READ getAlignment WRITE setAlignment NOTIFY alignmentChanged)
+    Q_PROPERTY(QString background READ getBackground WRITE setBackground NOTIFY backgroundChanged)
     Q_PROPERTY(int level READ getLevel WRITE setLevel NOTIFY levelChanged)
+    Q_PROPERTY(QList<int> scores READ getScores NOTIFY scoresChanged)
     Q_PROPERTY(ContentList* features READ getFeatures NOTIFY featuresChanged)
     Q_PROPERTY(ContentList* spells READ getSpells NOTIFY spellsChanged)
     Q_PROPERTY(ContentList* extraSpells READ getExtraSpells NOTIFY extraSpellsChanged)
@@ -41,15 +44,35 @@ public:
 
     QString getRace() const;
     void setRace(QString newRace);
+    Q_INVOKABLE void setRace(Race* r);
 
     QString getSubrace() const;
     void setSubrace(QString newSubrace);
+    Q_INVOKABLE void setSubrace(Race* r);
 
-    QString getCharClass() const;
-    void setCharClass(QString newCharClass);
+    QString getClassName() const;
+    void setClassName(QString newClassName);
+    void generateClassName();
+
+    QString getAlignment() const;
+    void setAlignment(QString newAlignment);
+
+    QString getBackground() const;
+    void setBackground(QString newBackground);
+
+    QList<int> getScores() const;
+    Q_INVOKABLE void addStr(int s);
+    Q_INVOKABLE void addDex(int d);
+    Q_INVOKABLE void addCon(int c);
+    Q_INVOKABLE void addInt(int i);
+    Q_INVOKABLE void addWis(int w);
+    Q_INVOKABLE void addCha(int c);
 
     int getLevel() const;
     void setLevel(int newLevel);
+
+    Q_INVOKABLE int getClassLevel(QString className);
+    Q_INVOKABLE void setClassLevel(QString className, int level);
 
     Q_INVOKABLE void addFeature(Feature* feature);
     Q_INVOKABLE bool addEffect(QString effect);
@@ -59,24 +82,38 @@ public:
     ContentList* getSpells() const;
     ContentList* getExtraSpells() const;
 
+    Q_INVOKABLE void saveCharacter();
+
 signals:
     void nameChanged();
     void raceChanged();
     void subraceChanged();
-    void charClassChanged();
+    void classNameChanged();
+    void alignmentChanged();
+    void backgroundChanged();
     void levelChanged();
+    void scoresChanged();
     void featuresChanged();
     void spellsChanged();
     void extraSpellsChanged();
 
 private:
     Database* database;
-    QString name, race, subrace, charClass, subClass;
-    int level;
-    QStringList languages;
+    QString name, race, subrace, className, subClass;
+    QString alignment, background;
+    QString speed, size;
+
+    //0=STR, 1=DEX, 2=CON, 3=INT, 4=WIS, 5=CHA
+    QList<int> scores;
+
+    int level; //the character's overall level
+    QMap<QString, int> levels;
+    QStringList langs, profs;
     ContentList* features;
     ContentList* spells;
     ContentList* extraSpells;
+    QMap<int, QStringList> leveledEffects;
+
 };
 
 #endif // CHARACTER_H

@@ -5,6 +5,7 @@ Choice::Choice(QObject *parent) :
 {
     choices.insert("<Make your choice>","");
     sel = 0;
+    lvl = 1;
 }
 
 QString Choice::getDesc() const{
@@ -37,6 +38,18 @@ bool Choice::setSel(int newSel){
     if(sel!=newSel){
         sel = newSel;
         emit selChanged();
+        return true;
+    }
+    return false;
+}
+
+int Choice::getLvl() const{
+    return lvl;
+}
+bool Choice::setLvl(int newLvl){
+    if(lvl!=newLvl){
+        lvl = newLvl;
+        emit lvlChanged();
         return true;
     }
     return false;

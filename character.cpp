@@ -6,11 +6,15 @@ Character::Character(QObject *parent) :
     name = "Jace Beleren";
     race = "Human";
     subrace = "";
-    charClass = "Wizard";
-    level = 8;
+    className = "Wizard";
+    level = 1;
+    levels.insert("Wizard",1);
     spells = new ContentList();
     extraSpells = new ContentList();
     features = new ContentList();
+    for(int i=0; i<6; i++){
+        scores.append(0);
+    }
 }
 
 void Character::setDatabase(Database* d){
@@ -32,6 +36,21 @@ void Character::setRace(QString newRace){
     race = newRace;
     emit raceChanged();
 }
+void Character::setRace(Race* r){
+    race = r->getName();
+    size = r->getSize();
+    speed = r->getSpeed();
+    for(int i=0; i<r->getLangs().length(); i++){
+        langs.append(r->getLangs().at(i));
+    }
+    for(int i=0; i<6; i++){
+        scores[i] += r->getScores()[i];
+    }
+    for(int i=0; i<r->getFeatures()->length(); i++){
+        addFeature(qobject_cast<Feature*>(r->getFeatures()->get(i)));
+    }
+    emit raceChanged();
+}
 
 QString Character::getSubrace() const{
     return subrace;
@@ -40,13 +59,48 @@ void Character::setSubrace(QString newSubrace){
     subrace = newSubrace;
     emit subraceChanged();
 }
-
-QString Character::getCharClass() const{
-    return charClass;
+void Character::setSubrace(Race* r){
+    subrace = r->getName();
+    for(int i=0; i<6; i++){
+        scores[i] += r->getScores()[i];
+    }
+    for(int i=0; i<r->getFeatures()->length(); i++){
+        addFeature(qobject_cast<Feature*>(r->getFeatures()->get(i)));
+    }
+    emit subraceChanged();
 }
-void Character::setCharClass(QString newCharClass){
-    charClass = newCharClass;
-    emit charClassChanged();
+
+QString Character::getClassName() const{
+    return className;
+}
+void Character::setClassName(QString newClassName){
+    className = newClassName;
+    emit classNameChanged();
+}
+void Character::generateClassName(){
+    //className = newClassName;
+    QString n;
+    foreach(QString c,levels.keys()){
+        n += c + " " + levels[c];
+    }
+    className = n;
+    emit classNameChanged();
+}
+
+QString Character::getAlignment() const{
+    return alignment;
+}
+void Character::setAlignment(QString newAlignment){
+    alignment = newAlignment;
+    emit alignmentChanged();
+}
+
+QString Character::getBackground() const{
+    return background;
+}
+void Character::setBackground(QString newBackground){
+    background = newBackground;
+    emit backgroundChanged();
 }
 
 int Character::getLevel() const{
@@ -55,6 +109,43 @@ int Character::getLevel() const{
 void Character::setLevel(int newLevel){
     level = newLevel;
     emit levelChanged();
+}
+
+QList<int> Character::getScores() const{
+    return scores;
+}
+void Character::addStr(int s){
+    scores[0] += s;
+}
+void Character::addDex(int d){
+    scores[1] += d;
+}
+void Character::addCon(int c){
+    scores[2] += c;
+}
+void Character::addInt(int i){
+    scores[3] += i;
+}
+void Character::addWis(int w){
+    scores[4] += w;
+}
+void Character::addCha(int c){
+    scores[5] += c;
+}
+
+int Character::getClassLevel(QString className){
+    if(levels.keys().contains(className)){
+        return levels.value(className);
+    }
+    return -1;
+}
+
+void Character::setClassLevel(QString className, int level){
+    if(levels.keys().contains(className)){
+        levels[className] = level;
+    } else{
+        levels.insert(className,level);
+    }
 }
 
 void Character::addFeature(Feature* feature){
@@ -121,6 +212,16 @@ ContentList* Character::getSpells() const{
 
 ContentList* Character::getExtraSpells() const{
     return extraSpells;
+}
+
+void Character::saveCharacter(){
+    QFile file("file.txt");
+    file.open(QIODevice::WriteOnly);
+    QDataStream out(&file);   // we will serialize the data into the file
+    //out << QString("the answer is");   // serialize a string
+    //out << (qint32)42;        // serialize an integer
+    //out << getSpells()->list;
+
 }
 
 void Character::readCharacter() {

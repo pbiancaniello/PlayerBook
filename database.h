@@ -22,26 +22,39 @@
 
 #include "contentlist.h"
 #include "feature.h"
+#include "race.h"
 
 #include <QObject>
 #include <QXmlStreamReader>
 #include <QFile>
+#include <QDir>
 
 class Database : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(ContentList* monsters READ getMonsters NOTIFY monstersChanged)
+    //Q_PROPERTY(ContentList* races READ getRaces NOTIFY racesChanged)
+    Q_PROPERTY(QQmlListProperty<Race> races READ getRaces NOTIFY racesChanged)
     Q_PROPERTY(ContentList* spells READ getSpells NOTIFY spellsChanged)
     Q_PROPERTY(QStringList spellList READ getSpellList NOTIFY spellListChanged)
+    Q_PROPERTY(QStringList ritualList READ getRitualList NOTIFY ritualListChanged)
+    Q_PROPERTY(QStringList langList READ getLangList NOTIFY langListChanged)
     Q_PROPERTY(QStringList errorLog READ getErrorLog NOTIFY errorLogChanged)
 public:
     explicit Database(QObject *parent = 0);
 
     ContentList* getMonsters() const;
+
+    //ContentList* getRaces() const;
+    QQmlListProperty<Race> getRaces();
+    Q_INVOKABLE Race* getRace(int i);
+
     ContentList* getSpells() const;
 
     QStringList getSpellList() const;
-    void addSpellToList(QString spell);
+    QStringList getRitualList() const;
+    QStringList getLangList() const;
+    Q_INVOKABLE bool containsClass(QString c) const;
 
     QStringList getErrorLog() const;
     void addError(QString error);
@@ -52,19 +65,29 @@ public:
 
 signals:
     void monstersChanged();
+    void racesChanged();
     void spellsChanged();
     void spellListChanged();
+    void ritualListChanged();
+    void langListChanged();
     void errorLogChanged();
 
 private:
     QXmlStreamReader* xml;
     ContentList* monsters;
+    //ContentList* races;
+    QList<Race*> races;
     ContentList* spells;
-    QStringList spellList;
+    QStringList spellList, ritualList, langList, classList;
     QStringList errorLog;
 
-    bool buildMonster(Monster* m);   
+    bool parseFile(QString filename);
+    bool buildMonster(Monster* m);
+    bool buildRace(Race* r);
     bool buildSpell(Spell* s);
+    bool buildSubrace(Race* r);
+    bool buildFeature(Feature* f);
+    bool buildChoice(Choice* c, QString s);
 
     int counter;
     QString tagType;

@@ -3,19 +3,30 @@ import QtQuick.Controls 1.2
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
+import QtQuick.Controls.Styles 1.2
+
+import Custom 1.0
 
 Item {
     id: newCharacterWindow
+    property Race race
+    property Race subrace
+    property bool complete: false
     Rectangle {
         id: raceSelection
         width: 500
         height: 400
-        color: "#ab3bd6"
-        //anchors.fill: parent
+        color: "white"
+        MouseArea{ //An easy fix to prevent clicking "through" the current rectangle
+            anchors.fill:parent
+        }
         Text{
-            x: 74
-            y: 35
+            id: racetext
             text: "Please choose a race"
+            anchors.left: parent.left
+            anchors.leftMargin: 55
+            anchors.top: parent.top
+            anchors.topMargin: 35
         }
         Button{
             id: back
@@ -31,52 +42,313 @@ Item {
             enabled: false
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            onClicked: classSelection.visible=true
-        }
-        ListModel {
-            id: races
-            ListElement { text: "Dark Elf"; }
-            ListElement { text: "Dragonborn"; }
-            ListElement { text: "Forest Gnome"; }
-            ListElement { text: "Half-Elf"; }
-            ListElement { text: "Half-Orc"; }
-            ListElement { text: "High Elf"; }
-            ListElement { text: "Hill Dwarf"; }
-            ListElement { text: "Human"; }
-            ListElement { text: "Lightfoot Halfling"; }
-            ListElement { text: "Mountain Dwarf"; }
-            ListElement { text: "Rock Gnome"; }
-            ListElement { text: "Stout Halfling"; }
-            ListElement { text: "Tiefling"; }
-            ListElement { text: "Unicorn"; }
-            ListElement { text: "Wood Elf"; }
-        }
-        ComboBox {
-            id: raceChoice
-            x: 190
-            y: 35
-            visible: false
-            model: races
-            //model: testData.getMonsters()
-            //onCurrentIndexChanged: next1.enabled = true
+            onClicked:{
+                if(race.choices.list.length>0){
+                    racialChoices.visible=true
+                } else if(race.subraces.list.length>0){
+                    subraceSelection.visible=true
+                } else{
+                    classSelection.visible=true
+                }
+            }
         }
         TableView {
-            x: 74
-            y: 54
-            model: races
-            width: 110
+            id: raceTable
+            model: database.races
+            anchors.top: racetext.bottom
+            anchors.topMargin: 6
+            anchors.left: parent.left
+            anchors.leftMargin: 20
+            width: 145
             height: 300
+            currentRow: 0
             TableViewColumn {
-                role: "text"
-                title: "Race Name"
+                role: "name"
+                title: "Race"
                 resizable: false
                 movable: false
             }
             on__CurrentRowItemChanged: {
                 if (currentRow>=0){
                     next1.enabled = true
+                    race = database.getRace(raceTable.currentRow)
                 }
-                //next1.text = testData.getMonsterName(0)
+            }
+        }
+        ScrollView{
+            anchors.top: racetext.bottom
+            anchors.topMargin: 6
+            anchors.left: raceTable.right
+            anchors.leftMargin: 14
+            anchors.bottom: raceTable.bottom
+            width: 300
+            Column{
+                id: descCol
+                spacing: 0
+                Text{
+                    id: racename
+                    text: race.name
+                    font.bold: true
+                    font.pointSize: 20
+                    font.family: "Beleren"
+                }
+                Text{
+                    text: "(Source: "+race.source+")<br>"
+                    font.italic: true
+                }
+                ListModel{id: blank}
+                Repeater{
+                    id: descList
+                    model: race.desc
+                    Text{
+                        text: modelData+"<br>"
+                        width: 280
+                        wrapMode: Text.WordWrap
+                    }
+                }
+            }
+        }
+    }
+    Rectangle{
+        id: racialChoices
+        visible: false
+        width: 500
+        height: 400
+        color: "white"
+        onVisibleChanged: {
+            if(!visible){
+                for(var i=0; i<choices.count; i++){
+                    choices.itemAt(i).children[1].currentIndex = 0
+                }
+            }
+        }
+        MouseArea{ //An easy fix to prevent clicking "through" the current rectangle
+            anchors.fill:parent
+        }
+        Button{
+            id: choiceBack
+            text: "Back"
+            enabled: true
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            onClicked: racialChoices.visible = false
+        }
+        Button{
+            text: "Next"
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            onClicked:{
+                if(race.subraces.list.length>0){
+                    subraceSelection.visible = true
+                } else{
+                    classSelection.visible = true
+                }
+            }
+        }
+        Text{
+            id: choiceText
+            text: "Please make the following choices for your race:"
+            anchors.left: parent.left
+            anchors.leftMargin: 55
+            anchors.top: parent.top
+            anchors.topMargin: 35
+        }
+        Column{
+            id: choiceCol
+            anchors.top: choiceText.bottom
+            anchors.topMargin: 8
+            anchors.left: choiceText.left
+            Repeater{
+                id: choices
+                model: race.choices.list
+                Column{
+                    property Choice c: race.choices.list[index]
+                    spacing: 4
+                    Text{
+                        text: c.desc
+                    }
+                    ComboBox{
+                        model: c.options
+                        width: 140
+                        currentIndex: c.sel
+                        onCurrentIndexChanged:{
+                            character.removeEffect(c.effects[c.sel])
+                            c.sel = currentIndex
+                            character.addEffect(c.effects[c.sel])
+                        }
+                    }
+                }
+            }
+        }
+    }
+    Rectangle {
+        id: subraceSelection
+        width: 500
+        height: 400
+        color: "white"
+        visible: false
+        MouseArea{ //An easy fix to prevent clicking "through" the current rectangle
+            anchors.fill:parent
+        }
+        Text{
+            id: subracetext
+            text: "Please choose a subrace"
+            anchors.left: parent.left
+            anchors.leftMargin: 55
+            anchors.top: parent.top
+            anchors.topMargin: 35
+        }
+        Button{
+            text: "Back"
+            enabled: true
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            onClicked: subraceSelection.visible=false
+        }
+        Button{
+            text: "Next"
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            onClicked: {
+                if(subrace.choices.list.length>0){
+                    subracialChoices.visible = true
+                } else{
+                    classSelection.visible = true
+                }
+            }
+        }
+        TableView {
+            id: subraceTable
+            model: race.subraces.list
+            anchors.top: subracetext.bottom
+            anchors.topMargin: 6
+            anchors.left: parent.left
+            anchors.leftMargin: 20
+            width: 145
+            height: 300
+            currentRow: 0
+            TableViewColumn {
+                role: "name"
+                title: "Subrace"
+                resizable: false
+                movable: false
+            }
+            on__CurrentRowItemChanged: {
+                if(currentRow>=0){
+                    subrace = race.subraces.list[currentRow]
+                }
+            }
+        }
+        ScrollView{
+            anchors.top: subracetext.bottom
+            anchors.topMargin: 6
+            anchors.left: subraceTable.right
+            anchors.leftMargin: 14
+            anchors.bottom: subraceTable.bottom
+            width: 300
+            Column{
+                spacing: 0
+                Text{
+                    text: {
+                        if(race!=null&&subrace!=null&&race.subraces.list.length>0){
+                            subrace.name
+                        } else{
+                            ""
+                        }
+                    }
+                    font.bold: true
+                    font.pointSize: 20
+                    font.family: "Beleren"
+                }
+                Text{
+                    text: "(Source: "+subrace.source+")<br>"
+                    font.italic: true
+                }
+                Repeater{
+                    model:{
+                        if(race!=null&&subrace!=null&&race.subraces.list.length>0){
+                            subrace.desc
+                        } else{
+                            blank
+                        }
+                    }
+                    Text{
+                        text: modelData+"<br>"
+                        width: 280
+                        wrapMode: Text.WordWrap
+                    }
+                }
+            }
+        }
+    }
+    Rectangle{
+        id: subracialChoices
+        visible: false
+        width: 500
+        height: 400
+        color: "white"
+        MouseArea{ //An easy fix to prevent clicking "through" the current rectangle
+            anchors.fill:parent
+        }
+        Button{
+            id: subchoiceBack
+            text: "Back"
+            enabled: true
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            onClicked:{
+                //console.log(choices.count)
+                for(var i=0; i<subchoices.count; i++){
+                    subchoices.itemAt(i).children[1].currentIndex = 0
+                }
+                subracialChoices.visible=false
+            }
+        }
+        Button{
+            text: "Next"
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            onClicked: classSelection.visible = true
+        }
+        Text{
+            id: subchoiceText
+            text: "Please make the following choices for your subrace:"
+            anchors.left: parent.left
+            anchors.leftMargin: 55
+            anchors.top: parent.top
+            anchors.topMargin: 35
+        }
+        Column{
+            id: subchoiceCol
+            anchors.top: subchoiceText.bottom
+            anchors.topMargin: 8
+            anchors.left: subchoiceText.left
+            Repeater{
+                id: subchoices
+                model:{
+                    if(race!=null&&subrace!=null&&race.subraces.list.length>0){
+                        subrace.choices.list
+                    } else{
+                        blank
+                    }
+                }
+                Column{
+                    property Choice c: subrace.choices.list[index]
+                    spacing: 4
+                    Text{
+                        text: c.desc
+                    }
+                    ComboBox{
+                        model: c.options
+                        width: 140
+                        currentIndex: c.sel
+                        onCurrentIndexChanged:{
+                            character.removeEffect(c.effects[c.sel])
+                            c.sel = currentIndex
+                            character.addEffect(c.effects[c.sel])
+                        }
+                    }
+                }
             }
         }
     }
@@ -86,7 +358,9 @@ Item {
         width: 500
         height: 400
         color: "#19a19a"
-        //anchors.fill: parent
+        MouseArea{ //An easy fix to prevent clicking "through" the current rectangle
+            anchors.fill:parent
+        }
         Text{
             text: "Please choose a class"
         }
@@ -105,10 +379,13 @@ Item {
     }
     Rectangle {
         id: scoreSelection
-        visible: true
+        visible: false
         width: 500
         height: 400
         color: "#3d52de"
+        MouseArea{ //An easy fix to prevent clicking "through" the current rectangle
+            anchors.fill:parent
+        }
         Item{
             id: helper
             function getCost(v){
@@ -242,6 +519,25 @@ Item {
             anchors.left: parent.left
             anchors.bottom: parent.bottom
             onClicked: scoreSelection.visible=false
+        }
+        Button{
+            text: "Finish"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            onClicked: {
+                character.setRace(database.getRace(raceTable.currentRow))
+                if(database.getRace(raceTable.currentRow).subraces.list.length>0){
+                    character.setSubrace(database.getRace(raceTable.currentRow).subraces.list[subraceTable.currentRow])
+                }
+                character.addStr(p_str.value)
+                character.addDex(p_dex.value)
+                character.addCon(p_con.value)
+                character.addInt(p_int.value)
+                character.addWis(p_wis.value)
+                character.addCha(p_cha.value)
+                complete=true
+                newCharacterWindow.visible = false
+            }
         }
     }
     Rectangle {

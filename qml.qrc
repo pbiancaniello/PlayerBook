@@ -3,7 +3,7 @@
         <file>main.qml</file>
         <file>Inventory.qml</file>
         <file>Spellcasting.qml</file>
-        <file>Character.qml</file>
+        <file>CharacterTab.qml</file>
         <file>Actions.qml</file>
         <file>Beastiary.qml</file>
         <file>NewCharacterWindow.qml</file>

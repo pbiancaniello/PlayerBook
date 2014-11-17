@@ -58,6 +58,7 @@ Rectangle{
                     id: descCol
                     anchors.top: f_name.bottom
                     anchors.topMargin: 8
+                    spacing: 4
                     Repeater{
                         id: descList
                         model: (feature!=null?feature.desc:blank)
@@ -76,6 +77,15 @@ Rectangle{
                         model: (feature!=null?feature.choices.list.length:0)
                         Column{
                             property Choice c: feature.choices.list[index]
+                            //visible: character.getClassLevel(feature.source)>=c.lvl
+                            visible:{
+                                if(database.containsClass(feature.source)){
+                                    character.getClassLevel(feature.source)>=c.lvl
+                                } else{
+                                    true
+                                }
+                            }
+
                             spacing: 4
                             Text{
                                 text: c.desc

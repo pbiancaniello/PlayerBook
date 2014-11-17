@@ -17,15 +17,12 @@ Item {
             //Layout.minimumWidth: 250
             //Layout.maximumWidth: 250
             Layout.maximumHeight: parent.height
-            RowLayout {
-                Label {
-                    text: "Available Spells"
-                    font.family: "Beleren"
-                    horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 12
-                }
+            Text{
+                text: "Available Spells"
+                font.family: "Beleren"
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: 12
             }
-
             RowLayout {
                 TableView {
                     id: playerSpellTable
@@ -36,23 +33,50 @@ Item {
                     TableViewColumn {
                         role: "name"
                         title: "Name"
-                        width: 80
+                        width: 120
                         //resizable: false
                         //movable: false
                     }
-                    on__CurrentRowItemChanged: {
+                    TableViewColumn {
+                        role: "level"
+                        title: "Level"
+                        width: 34
+                        //resizable: false
+                        //movable: false
+                    }
+                    TableViewColumn {
+                        role: "school"
+                        title: "School"
+                        width: 120
+                        //resizable: false
+                        //movable: false
+                    }
+                    onClicked: {
                         if(currentRow>=0&&rowCount>0){
                             removeSpellButton.enabled = true
                             spellView.spell = character.spells.get(currentRow)
                         }
                     }
-                    onRowCountChanged:
+                    onActiveFocusChanged: {
+                        if(currentRow>=0&&rowCount>0){
+                            removeSpellButton.enabled = true
+                            spellView.spell = character.spells.get(currentRow)
+                        }
+                    }
+                    onRowCountChanged: {
                         if(rowCount<1){
                             removeSpellButton.enabled = false
                             addSpellButton.visible = true
                             spellView.spell = null
                         }
+                    }
                 }
+            }
+            Text{
+                text: "Extra Spells"
+                font.family: "Beleren"
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: 12
             }
             RowLayout {
                 TableView {
@@ -68,9 +92,13 @@ Item {
                         //resizable: false
                         //movable: false
                     }
-                    on__CurrentRowItemChanged: {
+                    onClicked:{
                         if(currentRow>=0&&rowCount>0){
-                            removeSpellButton.enabled = true
+                            spellView.spell = character.extraSpells.get(currentRow)
+                        }
+                    }
+                    onActiveFocusChanged:{
+                        if(currentRow>=0&&rowCount>0){
                             spellView.spell = character.extraSpells.get(currentRow)
                         }
                     }
@@ -143,6 +171,7 @@ Item {
                     onClicked: {
                         if(playerSpellTable.currentRow>=0){
                             character.spells.remove(playerSpellTable.currentRow)
+                            spellView.spell = null
                             //enabled = false
                         }
                     }

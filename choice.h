@@ -20,6 +20,7 @@ class Choice : public QObject
     Q_PROPERTY(QStringList options READ getOptions NOTIFY optionsChanged)
     Q_PROPERTY(QStringList effects READ getEffects NOTIFY effectsChanged)
     Q_PROPERTY(int sel READ getSel WRITE setSel NOTIFY selChanged)
+    Q_PROPERTY(int lvl READ getLvl WRITE setLvl NOTIFY lvlChanged)
 public:
     explicit Choice(QObject *parent = 0);
 
@@ -33,16 +34,21 @@ public:
     int getSel() const;
     bool setSel(int newSel);
 
+    int getLvl() const;
+    bool setLvl(int newLvl);
+
 signals:
     void descChanged();
     void optionsChanged();
     void effectsChanged();
     void selChanged();
+    void lvlChanged();
 
 private:
     QString desc;
     QMap<QString,QString> choices;
-    int sel; //selection
+    int sel; //the currently selected option
+    int lvl; //the level a character must be to make a choice
 
 };
 

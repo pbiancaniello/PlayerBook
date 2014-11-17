@@ -138,7 +138,6 @@ Rectangle{
                     anchors.topMargin: 10
                     spacing: 4
                     ListModel{id: blank}
-                    //Loader { id: pageLoader }
                     Repeater{
                         id: descList
                         model: (spell!=null?spell.desc:blank)
@@ -146,16 +145,6 @@ Rectangle{
                             text: modelData
                             width: 320
                             wrapMode: Text.WordWrap
-                            MouseArea{
-                                id: mouseArea
-                                anchors.fill: parent
-                                onClicked: {
-                                    scrollReminder.text = "text item "+index
-                                    bottomBar.visible = false
-                                    //pageLoader.source = "SpellViewer.qml"
-
-                                }
-                            }
                         }
                     }
                 }

@@ -27,8 +27,6 @@ class Spell : public QObject
 public:
     explicit Spell(QObject *parent = 0);
 
-    Q_INVOKABLE QString objectName() const;
-
     QString getSource() const;
     bool setSource(QString newSource);
 

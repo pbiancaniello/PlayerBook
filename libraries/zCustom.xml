@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<source>
+  <name>Custom</name>
+  <content>
+	<spell>
+		<name>Winter's Shroud</name>
+		<level>2</level>
+		<school>conjuration</school>
+		<casttime>1 reaction, which you take when you are damaged by an attack or spell</casttime>
+		<range>Self</range>
+		<comps>V</comps>
+		<duration>Instantaneous</duration>
+		<desc>
+			<line>
+				<plain>Snow swirls about your being and whisks you away from harm. You teleport up to 15 feet to an unoccupied space you can see and gain half cover until the start of your next turn.</plain>
+			</line>
+		</desc>
+	</spell>
+	<feat>
+		<name>Winterkin Heritage</name>
+		<prereq>subrace|Eladrin</prereq>
+		<desc>
+			<line>
+				<plain>Winterkin are Eladrin changed by their proximity to the Winter Fey, granted the following abilities and powers from the archfey who rule said lands:</plain>
+			</line>
+			<line>
+				<plain>• You ignore difficult terrain that is ice or snow.</plain>
+			</line>
+			<line>
+				<plain>• You gain resistance to cold damage.</plain>
+			</line>
+			<line>
+				<plain>• You can cast the </plain>
+				<italic>winter's shroud </italic>
+				<plain>spell once using this feat. You regain the ability to do so when you finish a short or long rest.</plain>
+			</line>
+		</desc>
+		<effects>
+			<effect>addSpell|winter's shroud</effect>
+		</effects>
+	</feat>
+	<subrace>
+		<name>Eladrin</name>
+		<parent>Elf</parent>
+		<desc>
+			<line>
+				<plain>Creatures of magic with strong ties to nature, eladrin live in the twilight realm of the Feywild. Their cities sometimes cross over to the Material Plane, appearing briefly in mountain valleys or deep forest glades before fading back into the Feywild.</plain>
+			</line>
+			<line>
+				<plain>Eladrin are of human height. They are slim, and even the strongest look simply athletic rather than muscular. They have the same range of complexions as humans, though they are more often fair than dark. Their straight fine hair is often white, silver, or pale gold and they wear it long and loose. Their ears are long and pointed and their eyes are pearly and opalescent orbs of vibrant blue, violet, or green, lacking pupils. Eladrin can't grow facial hair and have little body hair.</plain>
+			</line>
+			<line>
+				<plain>Eladrin children grow much as human children do, but their aging process slows to a crawl when they reach maturity. They enjoy youth and health for most of their lives and don't begin to feel the effects of age until the middle of their third century. Most live for over 300 years, and even then they suffer few of the infirmities of old age.</plain>
+			</line>
+			<line>
+				<bolditalic>Ability Score Increase. </bolditalic>
+				<plain>Your Intelligence score increases by 1.</plain>
+			</line>
+			<line>
+				<bolditalic>Elf Weapon Training. </bolditalic>
+				<plain>You have proficiency with the longsword, shortsword, shortbow, and longbow.</plain>
+			</line>
+			<line>
+				<bolditalic>Fey Step. </bolditalic>
+				<plain>You can cast the </plain>
+				<italic>misty step </italic>
+				<plain>spell once using this trait. You regain the ability to do so when you finish a short or long rest.</plain>
+			</line>
+		</desc>
+		<scores>
+			<bonus>int 1</bonus>
+		</scores>
+		<features>
+			<feature>
+				<name>Elf Weapon Training</name>
+				<desc>
+					<line>
+						<plain>You have proficiency with the longsword, shortsword, shortbow, and longbow.</plain>
+					</line>
+				</desc>
+				<effects>
+					<effect>trainweapon|longsword</effect>
+					<effect>trainweapon|shortsword</effect>
+					<effect>trainweapon|longbow</effect>
+					<effect>trainweapon|shortbow</effect>
+				</effects>
+			</feature>
+			<feature>
+				<name>Fey Step</name>
+				<desc>
+					<line>
+						<plain>You can cast the </plain>
+						<italic>misty step </italic>
+						<plain>spell once using this trait. You regain the ability to do so when you finish a short or long rest.</plain>
+					</line>
+				</desc>
+				<effects>
+					<effect>addspell|misty step</effect>
+				</effects>
+			</feature>
+		</features>
+	</subrace>
+  </content>
+</source>

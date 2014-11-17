@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>libraries/PHB.xml</file>
         <file>libraries/MM.xml</file>
+        <file>libraries/spells.xml</file>
     </qresource>
 </RCC>
