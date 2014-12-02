@@ -14,6 +14,7 @@
 
 int main(int argc, char *argv[])
 {
+    qmlRegisterType<CastingPage>("Custom", 1, 0, "CastingPage");
     qmlRegisterType<Character>("Custom", 1, 0, "Character");
     qmlRegisterType<Database>("Custom", 1, 0, "Database");
     qmlRegisterType<Feature>("Custom", 1, 0, "Feature");

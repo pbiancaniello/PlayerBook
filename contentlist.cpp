@@ -65,21 +65,65 @@ void ContentList::remove(int i){
 }
 
 void ContentList::clear(){
-    int length = list.length();
-    for(int i=0; i<length; i++){
-        list.removeLast();
+    if(list.length()>0){
+        list.clear();
+        emit listChanged();
     }
-    emit listChanged();
 }
 
 int ContentList::length(){
     return list.length();
 }
 
-/*bool ContentList::contentLessThan(const QObject* o1, const QObject* o2){
-    return o1->objectName() < o2->objectName();
-}
+void ContentList::sortSpells(QString attribute){
+    if(attribute.toLower()=="name"){
+        QMap<QString, QObject*> temp;
+        foreach(QObject* q, list){
+            Spell* s = qobject_cast<Spell*>(q);
+            temp.insert(s->getName(),s);
+        }
+        list = temp.values();
+    } else if(attribute.toLower()=="school"){
+        QMap< QString, QList<Spell*> > temp;
+        foreach(QObject* q, list){
+            Spell* s = qobject_cast<Spell*>(q);
+            temp[s->getSchool()].append(s);
+        }
+        QList<QObject*> sorted;
+        foreach(QString qs, temp.keys()){
+            QMap<QString, QObject*> temp2;
+            foreach(QObject* q, temp[qs]){
+                Spell* s = qobject_cast<Spell*>(q);
+                temp2.insert(s->getName(),s);
+            }
+            sorted.append(temp2.values());
+        }
+        list = sorted;
+    } else if(attribute.toLower()=="level"){
+        QMap< QString, QList<Spell*> > temp;
+        foreach(QObject* q, list){
+            Spell* s = qobject_cast<Spell*>(q);
+            temp[s->getLevel()].append(s);
+        }
+        QList<QObject*> sorted;
+        foreach(QString qs, temp.keys()){
+            QMap<QString, QObject*> temp2;
+            foreach(QObject* q, temp[qs]){
+                Spell* s = qobject_cast<Spell*>(q);
+                temp2.insert(s->getName(),s);
+            }
+            sorted.append(temp2.values());
+        }
+        list = sorted;
+    }
 
-void ContentList::sort(){
-    qSort(list.begin(), list.end(), contentLessThan);
-}*/
+}
+bool spellNameComparison(const Spell* s1, const Spell* s2){
+    return s1->getName() < s2->getName();
+}
+bool spellSchoolComparison(const Spell &s1, const Spell &s2){
+    return s1.getSchool() < s2.getSchool();
+}
+bool spellLevelComparison(const Spell &s1, const Spell &s2){
+    return s1.getLevel() < s2.getLevel();
+}

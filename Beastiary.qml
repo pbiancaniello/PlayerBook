@@ -57,28 +57,26 @@ Item {
                         title: "Alignment"
                         width: 100
                     }
-                    on__CurrentRowItemChanged: {
+                    onCurrentRowChanged: {
                         if(currentRow>=0&&rowCount>0){
                             monsterView.monster = playerMonsters.get(currentRow)
-                            removeMonsterButton.enabled = true
-                        }
-                        var ms = monsterView.monster.spells
-                        if(ms.length>0){
-                            for(var i=0; i<ms.length; i++){
-                                var index = database.spells.containsSpell(ms[i])
-                                if(index>=0){
-                                    monsterSpells.addContent(database.spells.get(index))
+                            /*var ms = monsterView.monster.spells
+                            if(ms.length>0){
+                                for(var i=0; i<ms.length; i++){
+                                    var index = database.spells.containsSpell(ms[i])
+                                    if(index>=0){
+                                        monsterSpells.addContent(database.spells.get(index))
+                                    }
                                 }
-                            }
-                        } else{
-                            monsterSpells.clear()
-                            monsterSpellsWindow.visible = false
+                            } else{
+                                //monsterSpells.clear()
+                                //if(monsterSpellsWindow.visible == true){
+                                    //monsterSpellsWindow.visible = false
+                                //}
+                            }*/
                         }
                     }
-                    onRowCountChanged:
-                        if(rowCount<1){
-                            removeMonsterButton.enabled = false
-                        }
+                    onRowCountChanged: removeMonsterButton.enabled = (rowCount>0)
                 }
             }
             Window {
@@ -152,12 +150,15 @@ Item {
                 }
                 Button {
                     text: "View Monster Spells"
-                    visible: monsterView.monster!=null&&monsterView.monster.spells.length > 0
+                    //visible: monsterView.monster!=null&&monsterView.monster.spells.length>0
+                    visible: false
                     Layout.fillWidth: true
-                    onClicked: {
-                        monsterSpellsWindow.visible = true
-
-                    }
+                    onClicked: monsterSpellsWindow.visible = true
+                }
+                Button {
+                    text: "Create new monster"
+                    Layout.fillWidth: true
+                    onClicked: buildMonsterWindow.visible = true
                 }
             }
         }
@@ -193,12 +194,24 @@ Item {
                         role: "name"
                         title: "Spell Name"
                     }
-                    on__CurrentRowItemChanged: {
+                    onCurrentRowChanged: {
                         if(currentRow>=0&&rowCount>0){
                             monsterSpellView.spell = monsterSpells.get(currentRow)
                         }
                     }
                 }
+            }
+        }
+
+        Window{
+            id: buildMonsterWindow
+            visible: false
+            minimumWidth: 750
+            minimumHeight: 440
+            maximumWidth: minimumWidth
+            maximumHeight: minimumHeight
+            MonsterBuilder{
+                id: mb
             }
         }
 

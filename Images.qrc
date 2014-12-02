@@ -14,5 +14,6 @@
         <file>img/jace.png</file>
         <file>img/featureBar1.png</file>
         <file>img/featureBar2.png</file>
+        <file>img/portrait.png</file>
     </qresource>
 </RCC>

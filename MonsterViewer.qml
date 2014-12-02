@@ -162,85 +162,69 @@ Rectangle{
                     spacing: 4
                     Text{
                         id: m_sthrows
-                        visible: false
+                        visible: (monster!=null?monster.sThrows!="":false)
                         width: rightCol.width-21
-                        //text: "<b>Saving Throws </b> Wis +2"
-                        text: (monster!=null?monster.sThrows:"")
+                        text: (monster!=null?"<b>Saving Throws</b> "+monster.sThrows:"")
                         color: "#2a0700"
                         wrapMode: Text.WordWrap
-                        onTextChanged: visible = !(text=="")
                     }
                     Text{
                         id: m_skills
-                        visible: false
+                        visible: (monster!=null?monster.skills!="":false)
                         width: rightCol.width-21
-                        //text: "<b>Skills </b> Arcana +18, History +12, Insight +9, Perception +9"
-                        text: (monster!=null?monster.skills:"")
+                        text: (monster!=null?"<b>Skills</b> "+monster.skills:"")
                         color: "#2a0700"
                         wrapMode: Text.WordWrap
-                        onTextChanged: visible = !(text=="")
                     }
                     Text{
                         id: m_damvulns
-                        visible: false
+                        visible: (monster!=null?monster.damvulns!="":false)
                         width: rightCol.width-21
-                        ///text: "<b>Damage Vulnerabilities </b> fire, necrotic, poison, radiant, thunder, lightning"
-                        text: (monster!=null?monster.damvulns:"")
+                        text: (monster!=null?"<b>Damage Vulnerabilities</b> "+monster.damvulns:"")
                         color: "#2a0700"
                         wrapMode: Text.WordWrap
-                        onTextChanged: visible = !(text=="")
                     }
                     Text{
                         id: m_damres
-                        visible: false
+                        visible: (monster!=null?monster.damres!="":false)
                         width: rightCol.width-21
-                        //text: "<b>Damage Resistances </b> bludgeoning, piercing, and slashing from nonmagical items"
-                        text: (monster!=null?monster.damres:"")
+                        text: (monster!=null?"<b>Damage Resistances</b> "+monster.damres:"")
                         color: "#2a0700"
                         wrapMode: Text.WordWrap
-                        onTextChanged: visible = !(text=="")
                     }
                     Text{
                         id: m_damimms
-                        visible: false
+                        visible: (monster!=null?monster.damimms!="":false)
                         width: rightCol.width-21
-                        //text: "<b>Damage Immunities </b> necrotic, poison, sound, water, force, wind, gravity"
-                        text: (monster!=null?monster.damimms:"")
+                        text: (monster!=null?"<b>Damage Immunities</b> "+monster.damimms:"")
                         color: "#2a0700"
                         wrapMode: Text.WordWrap
-                        onTextChanged: visible = !(text=="")
                     }
                     Text{
                         id: m_conimms
-                        visible: false
+                        visible: (monster!=null?monster.conimms!="":false)
                         width: rightCol.width-21
-                        //text: "<b>Condition Immunities </b> charmed, exhaustion, frightened, paralyzed, poisoned"
-                        text: (monster!=null?monster.conimms:"")
+                        text: (monster!=null?"<b>Condition Immunities</b> "+monster.conimms:"")
                         color: "#2a0700"
                         wrapMode: Text.WordWrap
-                        onTextChanged: visible = !(text=="")
                     }
                     Text{
                         id: m_senses
-                        //visible: false
                         width: rightCol.width-21
-                        //text: "<b>Senses </b> darkvision 60 ft., passive Perception 10, passive Insight 10, tremorsense infinity"
-                        text: (monster!=null?monster.senses:"")
+                        text: (monster!=null?"<b>Senses</b> "+monster.senses:"")
                         color: "#2a0700"
                         wrapMode: Text.WordWrap
                     }
                     Text{
                         id: m_langs
                         width: rightCol.width-21
-                        //text: "<b>Languages </b> the languages it knew in life, high valyrian, dothraki, dance"
-                        text: (monster!=null?monster.langs:"")
+                        text: (monster!=null?"<b>Languages</b> "+monster.langs:"")
                         color: "#2a0700"
                         wrapMode: Text.WordWrap
                     }
                     Text{
                         id: m_challenge
-                        //text: "<b>Challenge </b> 3 (700 XP)"
-                        text: (monster!=null?monster.challenge:"")
+                        text: (monster!=null?"<b>Challenge</b> "+monster.challenge:"")
                         color: "#2a0700"
                     }
                 }

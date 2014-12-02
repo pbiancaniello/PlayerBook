@@ -529,12 +529,12 @@ Item {
                 if(database.getRace(raceTable.currentRow).subraces.list.length>0){
                     character.setSubrace(database.getRace(raceTable.currentRow).subraces.list[subraceTable.currentRow])
                 }
-                character.addStr(p_str.value)
-                character.addDex(p_dex.value)
-                character.addCon(p_con.value)
-                character.addInt(p_int.value)
-                character.addWis(p_wis.value)
-                character.addCha(p_cha.value)
+                character.addToScore(0, p_str.value)
+                character.addToScore(1, p_dex.value)
+                character.addToScore(2, p_con.value)
+                character.addToScore(3, p_int.value)
+                character.addToScore(4, p_wis.value)
+                character.addToScore(5, p_cha.value)
                 complete=true
                 newCharacterWindow.visible = false
             }

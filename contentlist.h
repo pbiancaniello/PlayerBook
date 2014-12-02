@@ -18,7 +18,6 @@
 #include <iostream>
 
 #include "monster.h"
-//#include "race.h"
 #include "spell.h"
 
 class ContentList : public QObject
@@ -32,12 +31,11 @@ public:
     Q_INVOKABLE QObject* get(int i);
     Q_INVOKABLE bool contains(QObject* o);
     Q_INVOKABLE int containsMonster(QString s);
-    //Q_INVOKABLE int containsRace(QString s);
     Q_INVOKABLE int containsSpell(QString s);
     Q_INVOKABLE void remove(int i);
     Q_INVOKABLE void clear();
     Q_INVOKABLE int length();
-    //Q_INVOKABLE void sort();
+    Q_INVOKABLE void sortSpells(QString attribute);
     //QList<QObject*> list;
 
 signals:
@@ -46,7 +44,11 @@ signals:
 
 private:
     QList<QObject*> list;
-    //bool contentLessThan(const QObject* o1, const QObject* o2);
+
+    bool spellNameComparison(const Spell *s1, const Spell *s2);
+    bool spellSchoolComparison(const Spell &s1, const Spell &s2);
+    bool spellLevelComparison(const Spell &s1, const Spell &s2);
+
 };
 
 #endif // CONTENTLIST_H

@@ -164,6 +164,12 @@ ApplicationWindow {
                 }
             }
             MenuItem {
+                text: "Save"
+                onTriggered: {
+                    character.saveCharacter()
+                }
+            }
+            MenuItem {
                 text: qsTr("Exit")
                 onTriggered: Qt.quit();
             }
@@ -179,16 +185,17 @@ ApplicationWindow {
             }
         }
         Tab {
-            title: "Inventory"
-            Inventory { anchors.fill:parent }
-        }
-        Tab {
             title: "Features"
             Features { anchors.fill: parent }
         }
         Tab {
             title: "Spellcasting"
+            //enabled: character.isCaster()
             Spellcasting { anchors.fill: parent }
+        }
+        Tab {
+            title: "Inventory"
+            Inventory { anchors.fill:parent }
         }
         Tab {
             title: "Beastiary"
@@ -196,6 +203,7 @@ ApplicationWindow {
         }
         Tab {
             title: "Actions"
+            //enabled: false
             Actions { anchors.fill:parent }
         }
     }

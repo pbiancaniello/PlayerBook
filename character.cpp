@@ -9,7 +9,6 @@ Character::Character(QObject *parent) :
     className = "Wizard";
     level = 1;
     levels.insert("Wizard",1);
-    spells = new ContentList();
     extraSpells = new ContentList();
     features = new ContentList();
     for(int i=0; i<6; i++){
@@ -114,23 +113,25 @@ void Character::setLevel(int newLevel){
 QList<int> Character::getScores() const{
     return scores;
 }
-void Character::addStr(int s){
-    scores[0] += s;
+QList<int> Character::getMods(){
+    QList<int> mods;
+    for(int i=0; i<6; i++){
+        mods.append(getMod(i));
+    }
+    return mods;
 }
-void Character::addDex(int d){
-    scores[1] += d;
+int Character::getMod(int score){
+    int s = scores[score];
+    if(s>11){
+        return (s-10)/2;
+    } else if(s<10){
+        return -1*(10-s)/2;
+    } else{
+        return 0;
+    }
 }
-void Character::addCon(int c){
-    scores[2] += c;
-}
-void Character::addInt(int i){
-    scores[3] += i;
-}
-void Character::addWis(int w){
-    scores[4] += w;
-}
-void Character::addCha(int c){
-    scores[5] += c;
+void Character::addToScore(int score, int amount){
+    scores[score]+=amount;
 }
 
 int Character::getClassLevel(QString className){
@@ -158,9 +159,33 @@ void Character::addFeature(Feature* feature){
 }
 
 bool Character::addEffect(QString effect){
+    QStringList effects = effect.split("^");
+    if(effects.length()>1){
+        bool b = true;
+        for(int i=0; i<effects.length(); i++){
+            b+=addEffect(effects.at(i));
+        }
+        return b;
+    }
     QStringList params = effect.toLower().split("|");
     if(params.size()==1){
-        return true;
+        return false;
+    } else if(params.at(0)=="leveled"){
+        if(params.size()>=4){ //should be something like leveled|#|command|paramaters
+            QString command;
+            for(int i=2; i<params.length(); i++){
+                command+=params.at(i)+"|";
+            }
+            command.chop(1);
+            if(params.at(1)=="every"){
+                for(int i=1; i<=20; i++){
+                    leveledEffects[i].append(command);
+                }
+            } else{
+                int level = params.at(1).toInt();
+                leveledEffects[level].append(command);
+            }
+        }
     } else if(params.size()==2){
         if(params[0]=="addspell"){
             int i = database->getSpells()->containsSpell(params[1]);
@@ -172,8 +197,7 @@ bool Character::addEffect(QString effect){
             return false;
         }
         return false;
-    }
-    else if(params.size()==3){
+    } else if(params.size()==3){
         return true;
     } else {
         return false;
@@ -205,23 +229,77 @@ bool Character::removeEffect(QString effect){
 ContentList* Character::getFeatures() const{
     return features;
 }
-
-ContentList* Character::getSpells() const{
-    return spells;
+QList<CastingPage*> Character::getCastingPages() const{
+    return castingPages;
 }
-
+void Character::addCastingPage(CastingPage* c){
+    castingPages.append(c);
+    emit castingPagesChanged();
+}
+CastingPage* Character::getCastingPage(QString name){
+    for(int i=0; i<castingPages.length(); i++){
+        if(name.toLower()==castingPages.at(i)->getClass().toLower()){
+            return castingPages.at(i);
+        }
+    }
+    return 0;
+}
+CastingPage* Character::getCastingPage(int i){
+    if(castingPages.length()>i){
+        return castingPages[i];
+    }
+    return 0;
+}
+int Character::numPages() const{
+    //return castingPages.length();
+    return 2;
+}
+int Character::casterLevel() const{
+    int level = 0;
+    for(int i=0; i<castingPages.length(); i++){
+        level+=castingPages[i]->getWeight()*levels[castingPages[i]->getClass()];
+    }
+    //return level;
+    return 2;
+}
+bool Character::isCaster() const{
+    //return castingPages.length()>0||extraSpells->length()>0;
+    return true;
+}
 ContentList* Character::getExtraSpells() const{
     return extraSpells;
 }
 
-void Character::saveCharacter(){
-    QFile file("file.txt");
-    file.open(QIODevice::WriteOnly);
-    QDataStream out(&file);   // we will serialize the data into the file
-    //out << QString("the answer is");   // serialize a string
-    //out << (qint32)42;        // serialize an integer
-    //out << getSpells()->list;
+QStringList Character::getLeveledEffects(int l) const{
+    /*if(!leveledEffects[l].isEmpty()){
 
+    }*/
+    return leveledEffects[l];
+}
+
+void Character::saveCharacter(){
+    QFile file("test.xml");
+    file.open(QIODevice::WriteOnly);
+    QXmlStreamWriter stream(&file);
+    stream.setAutoFormatting(true);
+    stream.writeStartDocument();
+    stream.writeStartElement("character");
+    //stream.writeAttribute("href", "http://qt.nokia.com/");
+    stream.writeTextElement("name", name);
+    stream.writeTextElement("race", race);
+    if(subrace!=""){
+        stream.writeTextElement("subrace", subrace);
+    }
+    if(features->length()>0){
+        stream.writeStartElement("features");
+        for(int i=0; i<features->length(); i++){
+            Feature* f = qobject_cast<Feature*>(features->get(i));
+            stream.writeTextElement("feature", f->getName());
+        }
+        stream.writeEndElement();
+    }
+    stream.writeEndElement(); //character
+    stream.writeEndDocument();
 }
 
 void Character::readCharacter() {

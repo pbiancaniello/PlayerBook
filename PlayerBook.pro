@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     feat.cpp \
     level.cpp \
     contentlist.cpp \
-    choice.cpp
+    choice.cpp \
+    castingpage.cpp
 
 RESOURCES += qml.qrc \
     Images.qrc \
@@ -38,4 +39,5 @@ HEADERS += \
     feat.h \
     level.h \
     contentlist.h \
-    choice.h
+    choice.h \
+    castingpage.h

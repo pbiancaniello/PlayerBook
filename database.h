@@ -23,6 +23,7 @@
 #include "contentlist.h"
 #include "feature.h"
 #include "race.h"
+#include "castingpage.h"
 
 #include <QObject>
 #include <QXmlStreamReader>
@@ -56,6 +57,9 @@ public:
     QStringList getLangList() const;
     Q_INVOKABLE bool containsClass(QString c) const;
 
+    Q_INVOKABLE QList<int> getMCSpellSlots(int casterLevel) const;
+    Q_INVOKABLE int getMCSpellSlots(int casterLevel, int slotLevel) const;
+
     QStringList getErrorLog() const;
     void addError(QString error);
 
@@ -79,6 +83,7 @@ private:
     QList<Race*> races;
     ContentList* spells;
     QStringList spellList, ritualList, langList, classList;
+    QMap< int, QList<int> > MCSpellSlots; //Multiclass Spell Slots, hardcoded for now
     QStringList errorLog;
 
     bool parseFile(QString filename);
@@ -88,6 +93,8 @@ private:
     bool buildSubrace(Race* r);
     bool buildFeature(Feature* f);
     bool buildChoice(Choice* c, QString s);
+
+    void buildMCSpellSlots();
 
     int counter;
     QString tagType;

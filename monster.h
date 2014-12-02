@@ -98,19 +98,19 @@ public:
     void setChallenge(QString newChallenge);
 
     QStringList getTraits() const;
-    void addTrait(QString trait);
+    Q_INVOKABLE void addTrait(QString trait);
 
     QStringList getSpells() const;
-    void addSpell(QString spell);
+    Q_INVOKABLE void addSpell(QString spell);
 
     QStringList getActions() const;
-    void addAction(QString action);
+    Q_INVOKABLE void addAction(QString action);
 
     QStringList getReactions() const;
-    void addReaction(QString reaction);
+    Q_INVOKABLE void addReaction(QString reaction);
 
     QStringList getLActions() const;
-    void addLAction(QString lAction);
+    Q_INVOKABLE void addLAction(QString lAction);
 
 signals:
     void sourceChanged();

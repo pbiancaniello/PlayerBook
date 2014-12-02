@@ -11,6 +11,7 @@
 
 #include <QObject>
 #include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 #include <QFile>
 
 #include <iostream>
@@ -30,7 +31,7 @@ class Character : public QObject
     Q_PROPERTY(int level READ getLevel WRITE setLevel NOTIFY levelChanged)
     Q_PROPERTY(QList<int> scores READ getScores NOTIFY scoresChanged)
     Q_PROPERTY(ContentList* features READ getFeatures NOTIFY featuresChanged)
-    Q_PROPERTY(ContentList* spells READ getSpells NOTIFY spellsChanged)
+    Q_PROPERTY(QList<CastingPage*> castingPages READ getCastingPages NOTIFY castingPagesChanged)
     Q_PROPERTY(ContentList* extraSpells READ getExtraSpells NOTIFY extraSpellsChanged)
 public:
     explicit Character(QObject *parent = 0);
@@ -61,12 +62,9 @@ public:
     void setBackground(QString newBackground);
 
     QList<int> getScores() const;
-    Q_INVOKABLE void addStr(int s);
-    Q_INVOKABLE void addDex(int d);
-    Q_INVOKABLE void addCon(int c);
-    Q_INVOKABLE void addInt(int i);
-    Q_INVOKABLE void addWis(int w);
-    Q_INVOKABLE void addCha(int c);
+    Q_INVOKABLE QList<int> getMods();
+    Q_INVOKABLE int getMod(int score);
+    Q_INVOKABLE void addToScore(int score, int amount);
 
     int getLevel() const;
     void setLevel(int newLevel);
@@ -79,8 +77,16 @@ public:
     Q_INVOKABLE bool removeEffect(QString effect);
 
     ContentList* getFeatures() const;
-    ContentList* getSpells() const;
+    Q_INVOKABLE QList<CastingPage*> getCastingPages() const;
+    void addCastingPage(CastingPage* c);
+    Q_INVOKABLE CastingPage* getCastingPage(QString name);
+    Q_INVOKABLE CastingPage* getCastingPage(int i);
+    Q_INVOKABLE int numPages() const;
+    Q_INVOKABLE int casterLevel() const;
+    Q_INVOKABLE bool isCaster() const;
     ContentList* getExtraSpells() const;
+
+    Q_INVOKABLE QStringList getLeveledEffects(int l) const;
 
     Q_INVOKABLE void saveCharacter();
 
@@ -94,7 +100,7 @@ signals:
     void levelChanged();
     void scoresChanged();
     void featuresChanged();
-    void spellsChanged();
+    void castingPagesChanged();
     void extraSpellsChanged();
 
 private:
@@ -110,7 +116,7 @@ private:
     QMap<QString, int> levels;
     QStringList langs, profs;
     ContentList* features;
-    ContentList* spells;
+    QList<CastingPage*> castingPages;
     ContentList* extraSpells;
     QMap<int, QStringList> leveledEffects;
 

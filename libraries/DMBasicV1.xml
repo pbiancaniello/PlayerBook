@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<source>
+  <name>Dungeon Master's Basic Rules Version 0.1</name>
+  <content>
+  <monster>
+		<name>Bandit Captain</name>
+		<size>Medium</size>
+		<type>humanoid (any race)</type>
+		<alignment>any non-lawful alignment</alignment>
+		<ac>15 (studded leather)</ac>
+		<hp>65 (10d8 + 20)</hp>
+		<speed>30 ft.</speed>
+		<scores>15 16 14 14 11 14</scores>
+		<sthrows>Str +4, Dex +5, Wis +2</sthrows>
+		<skills>Athletics +4, Deception +4</skills>
+		<senses>passive Perception 10</senses>
+		<langs>any two languages</langs>
+		<challenge>2 (450 XP)</challenge>
+		<actions>
+			<action>
+				<name>Multiattack. </name>
+				<effect>The captain makes three melee attacks: two with its scimitar and one with its dagger. Or the captain makes two ranged attacks with its daggers.</effect>
+			</action>
+			<action>
+				<name>Scimitar. </name>
+				<attack>Melee Weapon Attack: </attack>
+				<effect>+5 to hit, reach 5 ft., one target. Hit: 6 (ld6 + 3) slashing damage.</effect>
+			</action>
+			<action>
+				<name>Dagger. </name>
+				<attack>Melee or Ranged Weapon Attack: </attack>
+				<effect>+5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</effect>
+			</action>
+		</actions>
+		<reactions>
+			<reaction>
+				<name>Parry. </name>
+				<effect>The captain adds 2 to its AC against one melee attack that would hit it. To do so, the captain must see the attacker and be wielding a melee weapon.</effect>
+			</reaction>
+		</reactions>
+	</monster>
+  </content>
+</source>

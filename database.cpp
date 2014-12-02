@@ -7,6 +7,7 @@ Database::Database(QObject *parent) :
     //races = new QList<Race*>();
     spells = new ContentList();
     tagType = "temp";
+    buildMCSpellSlots();
 }
 
 ContentList* Database::getMonsters() const{
@@ -43,6 +44,13 @@ bool Database::containsClass(QString c) const{
     return classList.contains(c);
 }
 
+QList<int> Database::getMCSpellSlots(int casterLevel) const{
+    return MCSpellSlots[casterLevel];
+}
+int Database::getMCSpellSlots(int casterLevel, int slotLevel) const{
+    return  MCSpellSlots[casterLevel][slotLevel];
+}
+
 QStringList Database::getErrorLog() const{
     return errorLog;
 }
@@ -76,17 +84,13 @@ void Database::buildDatabase(){
 }
 
 bool Database::parseFile(QString filename){
-    QFile* file = new QFile(filename);
-        // If we can't open it, let's show an error message.
-    if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) {
-            std::cerr << "Couldn't open file";
-    } else{
-        //std::cerr << "yup";
+    QFile* file = new QFile(filename); // If we can't open it, show an error message.
+    if(!file->open(QIODevice::ReadOnly | QIODevice::Text)){
+        addError("Parsing error: Couldn't open "+filename);
+        return false;
     }
-        // QXmlStreamReader takes any QIODevice.
     QXmlStreamReader newXml(file);
     xml = &newXml;
-
     if (!xml->atEnd()){ //We'll parse the XML until we reach end of it.
         if(xml->readNext() == QXmlStreamReader::StartDocument) { //1st line
             if(xml->readNext() == QXmlStreamReader::StartElement) { //source
@@ -254,37 +258,37 @@ bool Database::buildMonster(Monster* m){
     xml->readNext();
     xml->readNext();
     if(xml->name().toString()=="sthrows"){ //may be at sthrows
-        m->setSThrows("<b>Saving Throws</b> "+xml->readElementText());
+        m->setSThrows(xml->readElementText());
         xml->readNext();
         xml->readNext();
     }
     if(xml->name().toString()=="skills"){ //may be at sthrows
-        m->setSkills("<b>Skills</b> "+xml->readElementText());
+        m->setSkills(xml->readElementText());
         xml->readNext();
         xml->readNext();
     }
     if(xml->name().toString()=="damvulns"){ //may be at damvulns
-        m->setDamVulns("<b>Damage Vulnerabilities</b> "+xml->readElementText());
+        m->setDamVulns(xml->readElementText());
         xml->readNext();
         xml->readNext();
     }
     if(xml->name().toString()=="damres"){ //may be at damres
-        m->setDamRes("<b>Damage Resistances</b> "+xml->readElementText());
+        m->setDamRes(xml->readElementText());
         xml->readNext();
         xml->readNext();
     }
     if(xml->name().toString()=="damimms"){ //may be at damimms
-        m->setDamImms("<b>Damage Immunities</b> "+xml->readElementText());
+        m->setDamImms(xml->readElementText());
         xml->readNext();
         xml->readNext();
     }
     if(xml->name().toString()=="conimms"){ //may be at conimms
-        m->setConImms("<b>Condition Immunities</b> "+xml->readElementText());
+        m->setConImms(xml->readElementText());
         xml->readNext();
         xml->readNext();
     }
     if(xml->name().toString()=="senses"){ //should be at senses
-        m->setSenses("<b>Senses</b> "+xml->readElementText());
+        m->setSenses(xml->readElementText());
     } else{
         addError(error+"an improper tag order and/or a missing senses tag");
         return false;
@@ -292,7 +296,7 @@ bool Database::buildMonster(Monster* m){
     xml->readNext();
     xml->readNext();
     if(xml->name().toString()=="langs"){ //should be at langs
-        m->setLangs("<b>Languages</b> "+xml->readElementText());
+        m->setLangs(xml->readElementText());
     } else{
         addError(error+"an improper tag order and/or a missing langs tag");
         return false;
@@ -300,7 +304,7 @@ bool Database::buildMonster(Monster* m){
     xml->readNext();
     xml->readNext();
     if(xml->name().toString()=="challenge"){ //should be at challenge
-        m->setChallenge("<b>Challenge</b> "+xml->readElementText());
+        m->setChallenge(xml->readElementText());
     } else{
         addError(error+"an improper tag order and/or a missing challenge tag");
         return false;
@@ -1244,4 +1248,123 @@ bool Database::buildChoice(Choice* c, QString s){
         return true;
     }
     return true;
+}
+
+void Database::buildMCSpellSlots(){
+
+    //1st level
+    QList<int> a = QList<int>() << 2;
+    for(int i=0; i<8; i++){
+        a << 0;
+    }
+    MCSpellSlots[1] = a;
+
+    //2nd level
+    QList<int> b = QList<int>() << 3;
+    for(int i=0; i<8; i++){
+        b << 0;
+    }
+    MCSpellSlots[2] = b;
+
+    //3rd level
+    QList<int> c = QList<int>() << 4 << 2;
+    for(int i=0; i<7; i++){
+        c << 0;
+    }
+    MCSpellSlots[3] = c;
+
+    //4th level
+    QList<int> d = QList<int>() << 4 << 3;
+    for(int i=0; i<7; i++){
+        d << 0;
+    }
+    MCSpellSlots[4] = d;
+
+    //5th level
+    QList<int> e = QList<int>() << 4 << 3 << 2;
+    for(int i=0; i<6; i++){
+        e << 0;
+    }
+    MCSpellSlots[5] = e;
+
+    //6th level
+    QList<int> f = QList<int>() << 4 << 3 << 3;
+    for(int i=0; i<6; i++){
+        f << 0;
+    }
+    MCSpellSlots[6] = f;
+
+    //7th level
+    QList<int> g = QList<int>() << 4 << 3 << 3 << 1;
+    for(int i=0; i<5; i++){
+        g << 0;
+    }
+    MCSpellSlots[7] = g;
+
+    //8th level
+    QList<int> h = QList<int>() << 4 << 3 << 3 << 2;
+    for(int i=0; i<5; i++){
+        h << 0;
+    }
+    MCSpellSlots[8] = h;
+
+    //9th level
+    QList<int> i = QList<int>() << 4 << 3 << 3 << 3 << 1;
+    for(int n=0; n<4; n++){
+        i << 0;
+    }
+    MCSpellSlots[9] = i;
+
+    //10th level
+    QList<int> j = QList<int>() << 4 << 3 << 3 << 3 << 2;
+    for(int i=0; i<4; i++){
+        j << 0;
+    }
+    MCSpellSlots[10] = j;
+
+    //11th level
+    QList<int> k = QList<int>() << 4 << 3 << 3 << 3 << 2 << 1;
+    for(int i=0; i<3; i++){
+        k << 0;
+    }
+    MCSpellSlots[11] = k;
+
+    //12th level
+    QList<int> l = QList<int>() << 4 << 3 << 3 << 3 << 2 << 1;
+    for(int i=0; i<3; i++){
+        l << 0;
+    }
+    MCSpellSlots[12] = l;
+
+    //13th level
+    QList<int> m = QList<int>() << 4 << 3 << 3 << 3 << 2 << 1 << 1 << 0 << 0;
+    MCSpellSlots[13] = m;
+
+    //14th level
+    QList<int> n = QList<int>() << 4 << 3 << 3 << 3 << 2 << 1 << 1 << 0 << 0;
+    MCSpellSlots[14] = n;
+
+    //15th level
+    QList<int> o = QList<int>() << 4 << 3 << 3 << 3 << 2 << 1 << 1 << 1 << 0;
+    MCSpellSlots[15] = o;
+
+    //16th level
+    QList<int> p = QList<int>() << 4 << 3 << 3 << 3 << 2 << 1 << 1 << 1 << 0;
+    MCSpellSlots[16] = p;
+
+    //17th level
+    QList<int> q = QList<int>() << 4 << 3 << 3 << 3 << 2 << 1 << 1 << 1 << 1;
+    MCSpellSlots[17] = q;
+
+    //18th level
+    QList<int> r = QList<int>() << 4 << 3 << 3 << 3 << 3 << 1 << 1 << 1 << 1;
+    MCSpellSlots[18] = r;
+
+    //19th level
+    QList<int> s = QList<int>() << 4 << 3 << 3 << 3 << 3 << 2 << 1 << 1 << 1;
+    MCSpellSlots[19] = s;
+
+    //20th level
+    QList<int> t = QList<int>() << 4 << 3 << 3 << 3 << 3 << 2 << 2 << 1 << 1;
+    MCSpellSlots[20] = t;
 }

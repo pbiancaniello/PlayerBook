@@ -18,15 +18,22 @@ RowLayout {
     anchors.leftMargin: 10
     Rectangle {
         id: portraitField
-        width: 200
-        height: 225
+        width: 250
+        height: 275
         color: "#ffffff"
         Image{
             id: charPortrait
-            width: 200
-            height: 200
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: 1
+            width: 248
+            height: 248
             source: "img/jace.png"
+            //sourceSize: 4
         }
+        Image{
+            source: "img/portrait.png"
+        }
+
         FileDialog {
             id: imageDialog
             title: "Please choose an image file"
@@ -42,8 +49,8 @@ RowLayout {
         Button {
             id: portraitButton
             x: 0
-            y: 200
-            width: 200
+            y: 250
+            width: 250
             height: 25
             text: "Select portrait"
             onClicked: imageDialog.open()
@@ -52,6 +59,9 @@ RowLayout {
     ColumnLayout{
         id: firstCol
         anchors.top: parent.top
+        anchors.topMargin: 50
+        anchors.left: portraitField.right
+        anchors.leftMargin: 50
         Text{
             id: c_name
             //text: character.name
@@ -99,6 +109,7 @@ RowLayout {
                     character.background = "Scholar"
                     //character.level = 20
                     character.level = character.scores[0]
+                    console.log(character.getLeveledEffects(3)[0])
                 }
             }
         }
