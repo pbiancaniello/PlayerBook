@@ -23,7 +23,7 @@ class Spell : public QObject
     Q_PROPERTY(QString range READ getRange WRITE setRange NOTIFY rangeChanged)
     Q_PROPERTY(QString comps READ getComps WRITE setComps NOTIFY compsChanged)
     Q_PROPERTY(QString duration READ getDuration WRITE setDuration NOTIFY durationChanged)
-    Q_PROPERTY(QStringList desc READ getDesc NOTIFY descChanged)
+    Q_PROPERTY(QString desc READ getDesc WRITE setDesc NOTIFY descChanged)
 public:
     explicit Spell(QObject *parent = 0);
 
@@ -51,8 +51,8 @@ public:
     QString getDuration() const;
     bool setDuration(QString newDuration);
 
-    QStringList getDesc() const;
-    bool addToDesc(QString line);
+    QString getDesc() const;
+    bool setDesc(QString newDesc);
 
 signals:
     void sourceChanged();
@@ -67,8 +67,7 @@ signals:
 
 private:
     QString source, name, level, school,
-    castTime, range, comps, duration;
-    QStringList desc;
+    castTime, range, comps, duration, desc;
 
 };
 

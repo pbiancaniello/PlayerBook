@@ -22,7 +22,7 @@ class Feature : public QObject
     Q_OBJECT
     Q_PROPERTY(QString source READ getSource WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QStringList desc READ getDesc NOTIFY descChanged)
+    Q_PROPERTY(QString desc READ getDesc NOTIFY descChanged)
     Q_PROPERTY(QStringList bonuses READ getBonuses NOTIFY bonusesChanged)
     Q_PROPERTY(ContentList* choices READ getChoices NOTIFY choicesChanged)
 public:
@@ -34,8 +34,8 @@ public:
     QString getName() const;
     void setName(QString newName);
 
-    QStringList getDesc() const;
-    bool addToDesc(QString line);
+    QString getDesc() const;
+    bool setDesc(QString newDesc);
 
     QStringList getBonuses() const;
     bool addToBonuses(QString bonus);
@@ -51,8 +51,8 @@ signals:
     void choicesChanged();
 
 private:
-    QString source, name;
-    QStringList desc, bonuses;
+    QString source, name, desc;
+    QStringList bonuses;
     ContentList* choices;
 
 };

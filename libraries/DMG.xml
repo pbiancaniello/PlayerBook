@@ -5,31 +5,7 @@
 	<subRace>
 		<name>Eladrin</name>
 		<parent>Elf</parent>
-		<description>
-			<line>
-				<plain>Creatures of magic with strong ties to nature, eladrin live in the twilight realm of the Feywild. Their cities sometimes cross over to the Material Plane, appearing briefly in mountain valleys or deep forest glades before fading back into the Feywild.</plain>
-			</line>
-			<line>
-				<plain>Eladrin are of human height. They are slim, and even the strongest look simply athletic rather than muscular. They have the same range of complexions as humans, though they are more often fair than dark. Their straight fine hair is often white, silver, or pale gold and they wear it long and loose. Their ears are long and pointed and their eyes are pearly and opalescent orbs of vibrant blue, violet, or green, lacking pupils. Eladrin can't grow facial hair and have little body hair.</plain>
-			</line>
-			<line>
-				<plain>Eladrin children grow much as human children do, but their aging process slows to a crawl when they reach maturity. They enjoy youth and health for most of their lives and don't begin to feel the effects of age until the middle of their third century. Most live for over 300 years, and even then they suffer few of the infirmities of old age.</plain>
-			</line>
-			<line>
-				<bolditalic>Ability Score Increase. </bolditalic>
-				<plain>Your Intelligence score increases by 1.</plain>
-			</line>
-			<line>
-				<bolditalic>Elf Weapon Training. </bolditalic>
-				<plain>You have proficiency with the longsword, shortsword, shortbow, and longbow.</plain>
-			</line>
-			<line>
-				<bolditalic>Fey Step. </bolditalic>
-				<plain>You can cast the </plain>
-				<italic>misty step </italic>
-				<plain>spell once using this trait. You regain the ability to do so when you finish a short or long rest.</plain>
-			</line>
-		</description>
+		<desc>Creatures of magic with strong ties to nature, eladrin live in the twilight realm of the Feywild. Their cities sometimes cross over to the Material Plane, appearing briefly in mountain valleys or deep forest glades before fading back into the Feywild.&lt;br&gt;Eladrin are of human height. They are slim, and even the strongest look simply athletic rather than muscular. They have the same range of complexions as humans, though they are more often fair than dark. Their straight fine hair is often white, silver, or pale gold and they wear it long and loose. Their ears are long and pointed and their eyes are pearly and opalescent orbs of vibrant blue, violet, or green, lacking pupils. Eladrin can't grow facial hair and have little body hair.&lt;br&gt;Eladrin children grow much as human children do, but their aging process slows to a crawl when they reach maturity. They enjoy youth and health for most of their lives and don't begin to feel the effects of age until the middle of their third century. Most live for over 300 years, and even then they suffer few of the infirmities of old age.&lt;br&gt;&lt;b&gt;&lt;i&gt;Ability Score Increase. &lt;/i&gt;&lt;/b&gt;Your Intelligence score increases by 1.&lt;br&gt;&lt;b&gt;&lt;i&gt;Elf Weapon Training. &lt;/i&gt;&lt;/b&gt;You have proficiency with the longsword, shortsword, shortbow, and longbow.&lt;br&gt;&lt;b&gt;&lt;i&gt;Fey Step. &lt;/i&gt;&lt;/b&gt;You can cast the &lt;i&gt;misty step &lt;/i&gt;spell once using this trait. You regain the ability to do so when you finish a short or long rest.</desc>
 		<scores>
 			<bonus>int 1</bonus>
 		</scores>
@@ -45,7 +21,7 @@
 				</effects>
 			</feature>
 			<feature>
-				<name>Cantrip</name>
+				<name>Fey Step</name>
 				<desc>You can cast the misty step spell once using this trait. You regain the ability to do so when you finish a short or long rest.</desc>
 				<effects>
 					<effect>addspell|misty step</effect>

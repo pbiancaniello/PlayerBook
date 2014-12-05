@@ -99,12 +99,12 @@ bool Spell::setDuration(QString newDuration){
     return false;
 }
 
-QStringList Spell::getDesc() const{
+QString Spell::getDesc() const{
     return desc;
 }
-bool Spell::addToDesc(QString line){
-    if(!desc.contains(line)){
-        desc.append(line);
+bool Spell::setDesc(QString newDesc){
+    if(desc!=newDesc){
+        desc = newDesc;
         emit descChanged();
         return true;
     }

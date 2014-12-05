@@ -25,12 +25,12 @@ void Feature::setName(QString newName){
     }
 }
 
-QStringList Feature::getDesc() const{
+QString Feature::getDesc() const{
     return desc;
 }
-bool Feature::addToDesc(QString line){
-    if(!desc.contains(line)){
-        desc.append(line);
+bool Feature::setDesc(QString newDesc){
+    if(desc!=newDesc){
+        desc=newDesc;
         emit descChanged();
         return true;
     }

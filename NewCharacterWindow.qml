@@ -87,23 +87,24 @@ Item {
                 spacing: 0
                 Text{
                     id: racename
-                    text: race.name
+                    text: race!=null?race.name:""
                     font.bold: true
                     font.pointSize: 20
                     font.family: "Beleren"
                 }
                 Text{
-                    text: "(Source: "+race.source+")<br>"
+                    text: "(Source: "+(race!=null?race.source:"")+")<br>"
                     font.italic: true
                 }
                 ListModel{id: blank}
                 Repeater{
                     id: descList
-                    model: race.desc
+                    model: race!=null?race.desc.split("<br>"):""
                     Text{
                         text: modelData+"<br>"
                         width: 280
                         wrapMode: Text.WordWrap
+                        textFormat: Text.RichText
                     }
                 }
             }
@@ -160,7 +161,7 @@ Item {
             anchors.left: choiceText.left
             Repeater{
                 id: choices
-                model: race.choices.list
+                model: race!=null?race.choices.list:blank
                 Column{
                     property Choice c: race.choices.list[index]
                     spacing: 4
@@ -219,7 +220,7 @@ Item {
         }
         TableView {
             id: subraceTable
-            model: race.subraces.list
+            model: race!=null?race.subraces.list:blank
             anchors.top: subracetext.bottom
             anchors.topMargin: 6
             anchors.left: parent.left
@@ -259,15 +260,16 @@ Item {
                     font.bold: true
                     font.pointSize: 20
                     font.family: "Beleren"
+                    textFormat: Text.RichText
                 }
                 Text{
-                    text: "(Source: "+subrace.source+")<br>"
+                    text: "(Source: "+(subrace!=null?subrace.source:"")+")<br>"
                     font.italic: true
                 }
                 Repeater{
                     model:{
                         if(race!=null&&subrace!=null&&race.subraces.list.length>0){
-                            subrace.desc
+                            subrace.desc.split("<br>")
                         } else{
                             blank
                         }

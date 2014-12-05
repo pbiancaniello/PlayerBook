@@ -112,15 +112,12 @@ bool Database::parseFile(QString filename){
                 }
                 xml->readNext(); // We should be at the first content item now
                 while(xml->tokenType()!=QXmlStreamReader::EndDocument){
-                    //std::cerr << type.toStdString() <<"\n";
                     if(xml->tokenType()!=QXmlStreamReader::EndElement){
                         QString type = xml->name().toString();
-                        /*std::cerr << type.toStdString() << "\n";
-                        if(!loopCheck(type)){
-                            addError("Infinite loop encountered in "+source+", missing an end tag somewhere.");
-                            break;
+                        if(xml->hasError()){
+                            addError("Parsing of source '"+source+"' was interrupted by an error");
+                            return false;
                         }
-                        tagType = type;*/
                         if(type=="feat"){
                             std::cerr << "FEATTTTTTT\n";
                         }
@@ -157,6 +154,8 @@ bool Database::parseFile(QString filename){
                                 emit spellsChanged();
                                 spellList.append(s->getName().toLower());
                                 emit spellListChanged();
+                            } else{
+                                std::cerr << "Unable to build spell\n";
                             }
                         }
                         if(type=="subrace"){ //Now at open subrace tag
@@ -321,97 +320,29 @@ bool Database::buildMonster(Monster* m){
                 break;
             }
             tagType = type;*/
-            if(xml->name().toString()=="trait"){ //we are at a trait
+            if(xml->name().toString()=="trait"){ //we are at a basic trait
+                m->addTrait(xml->readElementText());
+            } else if(xml->name().toString()=="spellcasting"){
                 xml->readNext();
                 xml->readNext();
-                if(xml->name().toString()=="name"){ //should be at trait name
-                    QString traitname = "<b><i>"+xml->readElementText()+"</b></i>";
+                if(xml->name().toString()=="desc"){
+                    m->addTrait(xml->readElementText());
                     xml->readNext();
                     xml->readNext();
-                    if(xml->name().toString()=="effect"){ //should be at trait effect
-                        QString effect = xml->readElementText();
-                        m->addTrait(traitname+effect);
-                        xml->readNext();
-                        xml->readNext(); //skip the effect endtag
-                    } else{
-                        addError(error+"a misformatted trait named "+traitname+", check effect tags");
-                        return false;
-                    }
-                } else{
-                    addError(error+"a misformatted trait, check name tags");
-                    return false;
-                }
-            } else if(xml->name().toString()=="spellcasting"){ //found a spellcasting trait
-                xml->readNext();
-                xml->readNext();
-                if(xml->name().toString()=="name"){ //should be at name
-                    QString castingname = "<b><i>"+xml->readElementText()+"</b></i>";
-                    xml->readNext();
-                    xml->readNext();
-                    if(xml->name().toString()=="effect"){ //should be at effect
-                        QString castingeffect = xml->readElementText()+"";
-                        xml->readNext();
-                        xml->readNext();
-                        QString totalSpells = castingname+castingeffect+"<br>";
-                        if(xml->name().toString()=="lines"){ //should be at spell lines
-                            xml->readNext();
-                            xml->readNext();
-                            while(xml->name().toString()!="lines"){ //loop until lines end tag
-                                /*QString type = xml->name().toString();
-                                if(!loopCheck(type)){
-                                    addError(error+"is missing a trait line end tag somewhere.");
-                                    break;
-                                }
-                                tagType = type;*/
-                                if(xml->name().toString()=="line"){ //found a line
-                                    xml->readNext();
-                                    xml->readNext();
-                                    if(xml->name().toString()=="usage"){ //should be at usage
-                                        QString usage = "<br>"+xml->readElementText();
-                                        xml->readNext();
-                                        xml->readNext();
-                                        if(xml->name().toString()=="spells"){ //should be at spells
-                                            QString text = xml->readElementText();
-                                            QString spells = "<i>"+text+"</i>";
-                                            QStringList tempSpells = text.toLower().split(",");
-                                            m->addSpell(tempSpells[0]);
-                                            if(tempSpells.length()>1){
-                                                for(int i=1; i<tempSpells.length(); i++){
-                                                    QString ts = tempSpells[i].trimmed();
-                                                    //ts = ts.left(1).toUpper()+ts.right(ts.length()-1);
-                                                    m->addSpell(ts);
-                                                    //std::cerr << ts.toStdString() << "\n";
-                                                }
-                                            }
-                                            //std::cerr << m->objectName().toStdString() << "\n";
-                                            totalSpells+=usage+spells;
-                                            xml->readNext();
-                                            xml->readNext();
-                                        } else{
-                                            addError(error+"a misformatted spellcasting trait, check spell tags");
-                                            return false;
-                                        }
-                                    } else{
-                                        addError(error+"a misformatted spellcasting trait, check usage tags");
-                                        return false;
-                                    }
-                                }
-                                xml->readNext();
-                                xml->readNext();
-                            }
-                            xml->readNext();
-                            xml->readNext();
-                        } else{
-                            addError(error+"a misformatted spellcasting trait, check lines tags");
-                            return false;
+                    if(xml->name().toString()=="spells"){
+                        QStringList spells = xml->readElementText().toLower().split(",");
+                        for(int i=1; i<spells.length(); i++){
+                            QString ts = spells[i].trimmed();
+                            m->addSpell(ts);
                         }
-                        m->addTrait(totalSpells);
+                        xml->readNext();
+                        xml->readNext();
                     } else{
-                        addError(error+"a misformatted spellcasting trait, check effect tags");
+                        addError(error+"a misformatted spellcasting trait");
                         return false;
                     }
                 } else{
-                    addError(error+"a misformatted spellcasting trait, check name tags");
+                    addError(error+"a misformatted spellcasting trait");
                     return false;
                 }
             } else{
@@ -435,30 +366,10 @@ bool Database::buildMonster(Monster* m){
             }
             tagType = type;*/
             if(xml->name().toString()=="action"){ //we are at an action
-                xml->readNext();
-                xml->readNext();
-                if(xml->name().toString()=="name"){ //should be at name
-                    QString action = "<b><i>"+xml->readElementText()+"</i></b>";
-                    xml->readNext();
-                    xml->readNext();
-                    if(xml->name().toString()=="attack"){ // we may be at an attack
-                        action+="<i>"+xml->readElementText()+"</i>";
-                        xml->readNext();
-                        xml->readNext();
-                    }
-                    if(xml->name().toString()=="effect"){ // should be at an effect
-                        action+=xml->readElementText();
-                        m->addAction(action);
-                        xml->readNext();
-                        xml->readNext();
-                    } else{
-                        addError(error+"a misformatted action, check effect tags");
-                        return false;
-                    }
-                } else{
-                    addError(error+"a misformatted action, check name tags");
-                    return false;
-                }
+                m->addAction(xml->readElementText());
+            } else{
+                addError(error+"a misformatted action section");
+                return false;
             }
             xml->readNext();
             xml->readNext();
@@ -477,25 +388,10 @@ bool Database::buildMonster(Monster* m){
             }
             tagType = type;*/
             if(xml->name().toString()=="reaction"){ //we are at a reaction
-                xml->readNext();
-                xml->readNext();
-                if(xml->name().toString()=="name"){ //should be at name
-                    QString reaction = "<b><i>"+xml->readElementText()+"</i></b>";
-                    xml->readNext();
-                    xml->readNext();
-                    if(xml->name().toString()=="effect"){ // should be at an effect
-                        reaction+=xml->readElementText();
-                        m->addReaction(reaction);
-                        xml->readNext();
-                        xml->readNext();
-                    } else{
-                        addError(error+"a misformatted reaction, check effect tags");
-                        return false;
-                    }
-                } else{
-                    addError(error+"a misformatted reaction, check name tags");
-                    return false;
-                }
+                m->addReaction(xml->readElementText());
+            } else{
+                addError(error+"a misformatted reaction section");
+                return false;
             }
             xml->readNext();
             xml->readNext();
@@ -506,47 +402,21 @@ bool Database::buildMonster(Monster* m){
     if(xml->name().toString()=="lactions"){ //may be at legendary actions
         xml->readNext();
         xml->readNext();
-        if(xml->name().toString()=="details"){ //should be at details tag
-            m->addLAction(xml->readElementText()+"<br>");
-            xml->readNext();
-            xml->readNext();
-            while(xml->name().toString()!="lactions"){ //loop until laction end tag
-                /*QString type = xml->name().toString();
-                if(!loopCheck(type)){
-                    addError(error+"is missing a laction end tag somewhere.");
-                    break;
-                }
-                tagType = type;*/
-                if(xml->name().toString()=="laction"){ //at a laction
-                    xml->readNext();
-                    xml->readNext();
-                    if(xml->name().toString()=="name"){ //should be at name
-                        QString laction = "<b>"+xml->readElementText()+"</b>";
-                        xml->readNext();
-                        xml->readNext();
-                        if(xml->name().toString()=="effect"){
-                            laction += xml->readElementText();
-                            m->addLAction(laction);
-                            xml->readNext();
-                            xml->readNext();
-                            xml->readNext();
-                            xml->readNext();
-                        } else{
-                            addError(error+"a misformatted legendary action, check effect tags");
-                            return false;
-                        }
-                    } else{
-                        addError(error+"a misformatted legendary action, check name tags");
-                        return false;
-                    }
-                } else{
-                    addError(error+"a misformatted legendary action, check laction tags");
-                    return false;
-                }
+        while(xml->name().toString()!="lactions"){ //loop until laction end tag
+            /*QString type = xml->name().toString();
+            if(!loopCheck(type)){
+                addError(error+"is missing a laction end tag somewhere.");
+                break;
             }
-        } else{
-            addError(error+"a misformatted legendary action, check details tags");
-            return false;
+            tagType = type;*/
+            if(xml->name().toString()=="laction"){ //at a laction
+                m->addLAction(xml->readElementText());
+            } else{
+                addError(error+"a misformatted legendary action section");
+                return false;
+            }
+            xml->readNext();
+            xml->readNext();
         }
     }
     return true;
@@ -572,43 +442,13 @@ bool Database::buildRace(Race* r){
     xml->readNext();
     xml->readNext();
     if(xml->name().toString()=="desc"){ //should be at description
-        xml->readNext();
-        xml->readNext();
-        while(xml->name().toString()!="desc"){ //loop until description end tag
-            /*QString type = xml->name().toString();
-            if(!loopCheck(type)){
-                addError(error+"is missing a line end tag somewhere.");
-                break;
-            }
-            tagType = type;*/
-            if(xml->name().toString()=="line"){ //we are at a line
-                xml->readNext();
-                xml->readNext();
-                QString line = "";
-                while(xml->name().toString()!="line"){ //loop until line end tag
-                    if(xml->name().toString()=="plain"){
-                        line+=xml->readElementText();
-                    } else if (xml->name().toString()=="bold"){
-                        line+="<b>"+xml->readElementText()+"</b>";
-                    } else if (xml->name().toString()=="italic"){
-                        line+="<i>"+xml->readElementText()+"</i>";
-                    } else if (xml->name().toString()=="bolditalic"){
-                        line+="<b><i>"+xml->readElementText()+"</b></i>";
-                    } else{
-                        addError(error+"has improper formatting in its description");
-                        return false;
-                    }
-                    xml->readNext();
-                    xml->readNext();
-                }
-                r->addToDesc(line);
-            } else{
-                addError(error+"has improper formatting in its desc");
-                return false;
-            }
-            xml->readNext();
-            xml->readNext();
+        r->setDesc(xml->readElementText());
+        if(xml->hasError()){
+            addError(error+"an incorrectly formatted description");
+            return false;
         }
+        xml->readNext();
+        xml->readNext();
     } else{
         addError(error+"an improper tag order and/or a missing desc tag");
         return false;
@@ -866,42 +706,10 @@ bool Database::buildSpell(Spell* s){
     xml->readNext();
     xml->readNext();
     if(xml->name().toString()=="desc"){ //should be at description
-        xml->readNext();
-        xml->readNext();
-        while(xml->name().toString()!="desc"){ //loop until description end tag
-            /*QString type = xml->name().toString();
-            if(!loopCheck(type)){
-                addError(error+"is missing a line end tag somewhere.");
-                break;
-            }
-            tagType = type;*/
-            if(xml->name().toString()=="line"){ //we are at a line
-                xml->readNext();
-                xml->readNext();
-                QString line = "";
-                while(xml->name().toString()!="line"){ //loop until line end tag
-                    if(xml->name().toString()=="plain"){
-                        line+=xml->readElementText();
-                    } else if (xml->name().toString()=="bold"){
-                        line+="<b>"+xml->readElementText()+"</b>";
-                    } else if (xml->name().toString()=="italic"){
-                        line+="<i>"+xml->readElementText()+"</i>";
-                    } else if (xml->name().toString()=="bolditalic"){
-                        line+="<b><i>"+xml->readElementText()+"</b></i>";
-                    } else{
-                        addError(error+"has improper formatting in its description");
-                        return false;
-                    }
-                    xml->readNext();
-                    xml->readNext();
-                }
-                s->addToDesc(line);
-            } else{
-                addError(error+"has improper formatting in its desc");
-                return false;
-            }
-            xml->readNext();
-            xml->readNext();
+        s->setDesc(xml->readElementText());
+        if(xml->hasError()){
+            addError(error+"an improperly formatted description");
+            return false;
         }
     } else{
         addError(error+"an improper tag order and/or a missing desc tag");
@@ -943,42 +751,10 @@ bool Database::buildSubrace(Race* r){
     xml->readNext();
     xml->readNext();
     if(xml->name().toString()=="desc"){ //should be at description
-        xml->readNext();
-        xml->readNext();
-        while(xml->name().toString()!="desc"){ //loop until description end tag
-            /*QString type = xml->name().toString();
-            if(!loopCheck(type)){
-                addError(error+"is missing a line end tag somewhere.");
-                break;
-            }
-            tagType = type;*/
-            if(xml->name().toString()=="line"){ //we are at a line
-                xml->readNext();
-                xml->readNext();
-                QString line = "";
-                while(xml->name().toString()!="line"){ //loop until line end tag
-                    if(xml->name().toString()=="plain"){
-                        line+=xml->readElementText();
-                    } else if (xml->name().toString()=="bold"){
-                        line+="<b>"+xml->readElementText()+"</b>";
-                    } else if (xml->name().toString()=="italic"){
-                        line+="<i>"+xml->readElementText()+"</i>";
-                    } else if (xml->name().toString()=="bolditalic"){
-                        line+="<b><i>"+xml->readElementText()+"</b></i>";
-                    } else{
-                        addError(error+"has improper formatting in its description");
-                        return false;
-                    }
-                    xml->readNext();
-                    xml->readNext();
-                }
-                r->addToDesc(line);
-            } else{
-                addError(error+"has improper formatting in its description");
-                return false;
-            }
-            xml->readNext();
-            xml->readNext();
+        r->setDesc(xml->readElementText());
+        if(xml->hasError()){
+            addError(error+"an improperly formatted description");
+            return false;
         }
     } else{
         addError(error+"an improper tag order and/or a missing desc tag");
@@ -1120,42 +896,10 @@ bool Database::buildFeature(Feature* f){
     xml->readNext();
     xml->readNext();
     if(xml->name().toString()=="desc"){ //should be at description
-        xml->readNext();
-        xml->readNext();
-        while(xml->name().toString()!="desc"){ //loop until description end tag
-            /*QString type = xml->name().toString();
-            if(!loopCheck(type)){
-                addError(error+"is missing a line end tag somewhere.");
-                break;
-            }
-            tagType = type;*/
-            if(xml->name().toString()=="line"){ //we are at a line
-                xml->readNext();
-                xml->readNext();
-                QString line = "";
-                while(xml->name().toString()!="line"){ //loop until line end tag
-                    if(xml->name().toString()=="plain"){
-                        line+=xml->readElementText();
-                    } else if (xml->name().toString()=="bold"){
-                        line+="<b>"+xml->readElementText()+"</b>";
-                    } else if (xml->name().toString()=="italic"){
-                        line+="<i>"+xml->readElementText()+"</i>";
-                    } else if (xml->name().toString()=="bolditalic"){
-                        line+="<b><i>"+xml->readElementText()+"</b></i>";
-                    } else{
-                        addError(error+"improper formatting in its description");
-                        return false;
-                    }
-                    xml->readNext();
-                    xml->readNext();
-                }
-                f->addToDesc(line);
-            } else{
-                addError(error+"improper formatting in its description");
-                return false;
-            }
-            xml->readNext();
-            xml->readNext();
+        f->setDesc(xml->readElementText());
+        if(xml->hasError()){
+            addError(error+"an improperly formatted description");
+            return false;
         }
     } else{
         addError(error+"an improper tag order and/or a missing desc tag");

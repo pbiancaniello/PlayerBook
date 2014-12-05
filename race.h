@@ -26,7 +26,7 @@ class Race : public QObject
     Q_OBJECT
     Q_PROPERTY(QString source READ getSource WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString name READ getName WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QStringList desc READ getDesc NOTIFY descChanged)
+    Q_PROPERTY(QString desc READ getDesc NOTIFY descChanged)
     Q_PROPERTY(QString size READ getSize WRITE setSize NOTIFY sizeChanged)
     Q_PROPERTY(QString speed READ getSpeed WRITE setSpeed NOTIFY speedChanged)
     Q_PROPERTY(QStringList langs READ getLangs NOTIFY langsChanged)
@@ -45,8 +45,8 @@ public:
     QString getName() const;
     bool setName(QString n);
 
-    QStringList getDesc() const;
-    void addToDesc(QString s);
+    QString getDesc() const;
+    bool setDesc(QString s);
 
     QString getSize() const;
     bool setSize(QString s);
@@ -79,8 +79,8 @@ signals:
     void subracesChanged();
 
 private:
-    QString source, name, size, speed;
-    QStringList desc, langs;
+    QString source, name, size, speed, desc;
+    QStringList langs;
     ContentList* choices;
     QList<int> scores; //0=STR, 1=DEX, 2=CON, 3=INT, 4=WIS, 5=CHA
     ContentList* features;

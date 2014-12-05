@@ -294,7 +294,10 @@ void Character::saveCharacter(){
         stream.writeStartElement("features");
         for(int i=0; i<features->length(); i++){
             Feature* f = qobject_cast<Feature*>(features->get(i));
-            stream.writeTextElement("feature", f->getName());
+            stream.writeStartElement("feature");
+            stream.writeTextElement("name", f->getName());
+            stream.writeTextElement("desc", f->getDesc().at(0));
+            stream.writeEndElement();
         }
         stream.writeEndElement();
     }

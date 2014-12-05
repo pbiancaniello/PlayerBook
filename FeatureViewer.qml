@@ -61,11 +61,12 @@ Rectangle{
                     spacing: 4
                     Repeater{
                         id: descList
-                        model: (feature!=null?feature.desc:blank)
+                        model: (feature!=null?feature.desc.split("<br>"):blank)
                         Text{
                             text: modelData
                             width: 320
                             wrapMode: Text.WordWrap
+                            textFormat: Text.RichText
                         }
                     }
                 }

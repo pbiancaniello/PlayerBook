@@ -140,11 +140,12 @@ Rectangle{
                     ListModel{id: blank}
                     Repeater{
                         id: descList
-                        model: (spell!=null?spell.desc:blank)
+                        model: (spell!=null?spell.desc.split("<br>"):blank)
                         Text{
                             text: modelData
                             width: 320
                             wrapMode: Text.WordWrap
+                            textFormat: Text.RichText
                         }
                     }
                 }

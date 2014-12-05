@@ -34,12 +34,16 @@ bool Race::setName(QString n){
     return false;
 }
 
-QStringList Race::getDesc() const{
+QString Race::getDesc() const{
     return desc;
 }
-void Race::addToDesc(QString s){
-    desc.append(s);
-    emit descChanged();
+bool Race::setDesc(QString s){
+    if(desc!=s){
+        desc = s;
+        emit descChanged();
+        return true;
+    }
+    return false;
 }
 
 QString Race::getSize() const{

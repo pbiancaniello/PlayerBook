@@ -17,26 +17,12 @@
 		<langs>any two languages</langs>
 		<challenge>2 (450 XP)</challenge>
 		<actions>
-			<action>
-				<name>Multiattack. </name>
-				<effect>The captain makes three melee attacks: two with its scimitar and one with its dagger. Or the captain makes two ranged attacks with its daggers.</effect>
-			</action>
-			<action>
-				<name>Scimitar. </name>
-				<attack>Melee Weapon Attack: </attack>
-				<effect>+5 to hit, reach 5 ft., one target. Hit: 6 (ld6 + 3) slashing damage.</effect>
-			</action>
-			<action>
-				<name>Dagger. </name>
-				<attack>Melee or Ranged Weapon Attack: </attack>
-				<effect>+5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</effect>
-			</action>
+			<action>&lt;b&gt;&lt;i&gt;Multiattack. &lt;/i&gt;&lt;/b&gt;The captain makes three melee attacks: two with its scimitar and one with its dagger. Or the captain makes two ranged attacks with its daggers.</action>
+			<action>&lt;b&gt;&lt;i&gt;Scimitar. &lt;/i&gt;&lt;/b&gt;&lt;i&gt;Melee Weapon Attack: &lt;/i&gt;+5 to hit, reach 5 ft., one target. &lt;i&gt;Hit: &lt;/i&gt;6 (ld6 + 3) slashing damage.</action>
+			<action>&lt;b&gt;&lt;i&gt;Dagger. &lt;/i&gt;&lt;/b&gt;&lt;i&gt;Melee or Ranged Weapon Attack: &lt;/i&gt;+5 to hit, reach 5 ft. or range 20/60 ft., one target. &lt;i&gt;Hit: &lt;/i&gt;5 (1d4 + 3) piercing damage.</action>
 		</actions>
 		<reactions>
-			<reaction>
-				<name>Parry. </name>
-				<effect>The captain adds 2 to its AC against one melee attack that would hit it. To do so, the captain must see the attacker and be wielding a melee weapon.</effect>
-			</reaction>
+			<reaction>&lt;b&gt;&lt;i&gt;Parry. &lt;/i&gt;&lt;/b&gt;The captain adds 2 to its AC against one melee attack that would hit it. To do so, the captain must see the attacker and be wielding a melee weapon.</reaction>
 		</reactions>
 	</monster>
 	<monster>
@@ -67,90 +53,23 @@
 		<langs>Common plus up to five other languages</langs>
 		<challenge>21 (33,000 XP)</challenge>
 		<traits>
-			<trait>
-				<name>Legendary Resistance (3/Day). </name>
-				<effect>If the lich fails a saving throw, it can choose to succeed instead.</effect>
-			</trait>
-			<trait>
-				<name>Rejuvenation. </name>
-				<effect>If it has a phylactery, a destroyed lich gains a new body in 1d10 days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the phylactery.</effect>
-			</trait>
+			<trait>&lt;b&gt;&lt;i&gt;Legendary Resistance (3/Day). &lt;/i&gt;&lt;/b&gt;If the lich fails a saving throw, it can choose to succeed instead.</trait>
+			<trait>&lt;b&gt;&lt;i&gt;Rejuvenation. &lt;/i&gt;&lt;/b&gt;If it has a phylactery, a destroyed lich gains a new body in 1d10 days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the phylactery.</trait>
 			<spellcasting>
-				<name>Spellcasting. </name>
-				<effect>The lich is an 18th-level spellcaster. Its spellcasting ability is Intelligence (spell save DC 20, +12 to hit with spell attacks). The lich has the following wizard spells prepared:</effect>
-				<lines>
-					<line>
-						<usage>Cantrips (at will): </usage>
-						<spells>mage hand, prestidigitation, ray of frost</spells>
-					</line>
-					<line>
-						<usage>1st level (4 slots): </usage>
-						<spells>detect magic, magic missile, shield, thunderwave</spells>
-					</line>
-					<line>
-						<usage>2nd level (3 slots): </usage>
-						<spells>detect thoughts, invisibility, Melf's acid arrow, mirror image</spells>
-					</line>
-					<line>
-						<usage>3rd level (3 slots): </usage>
-						<spells>animate dead, counterspell, dispel magic, fireball</spells>
-					</line>
-					<line>
-						<usage>4th level (3 slots): </usage>
-						<spells>blight, dimension door</spells>
-					</line>
-					<line>
-						<usage>5th level (3 slots): </usage>
-						<spells>cloudkill, scrying</spells>
-					</line>
-					<line>
-						<usage>6th level (1 slot): </usage>
-						<spells>disintegrate, globe of invulnerability</spells>
-					</line>
-					<line>
-						<usage>7th level (1 slot): </usage>
-						<spells>finger of death, plane shift</spells>
-					</line>
-					<line>
-						<usage>8th level (1 slot): </usage>
-						<spells>dominate monsters, power word stun</spells>
-					</line>
-					<line>
-						<usage>9th level (1 slot): </usage>
-						<spells>power word kill</spells>
-					</line>
-				</lines>
+				<desc>&lt;b&gt;&lt;i&gt;Spellcasting. &lt;/i&gt;&lt;/b&gt;The lich is an 18th-level spellcaster. Its spellcasting ability is Intelligence (spell save DC 20, +12 to hit with spell attacks). The lich has the following wizard spells prepared:&lt;br&gt;&lt;br&gt;Cantrips (at will): &lt;i&gt;mage hand, prestidigitation, ray of frost&lt;/i&gt;&lt;br&gt;1st level (4 slots): &lt;i&gt;detect magic, magic missile, shield, thunderwave&lt;/i&gt;&lt;br&gt;2nd level (3 slots): &lt;i&gt;detect thoughts, invisibility, Melf's acid arrow, mirror image&lt;/i&gt;&lt;br&gt;3rd level (3 slots): &lt;i&gt;animate dead, counterspell, dispel magic, fireball&lt;/i&gt;&lt;br&gt;4th level (3 slots): &lt;i&gt;blight, dimension door&lt;/i&gt;&lt;br&gt;5th level (3 slots): &lt;i&gt;cloudkill, scrying&lt;/i&gt;&lt;br&gt;6th level (1 slot): &lt;i&gt;disintegrate, globe of invulnerability&lt;/i&gt;&lt;br&gt;7th level (1 slot): &lt;i&gt;finger of death, plane shift&lt;/i&gt;&lt;br&gt;8th level (1 slot): &lt;i&gt;dominate monsters, power word stun&lt;/i&gt;&lt;br&gt;9th level (1 slot): &lt;i&gt;power word kill&lt;/i&gt;</desc>
+				<spells>mage hand, prestidigitation, ray of frost, detect magic, magic missile, shield, thunderwave, detect thoughts, invisibility, Melf's acid arrow, mirror image, animate dead, counterspell, dispel magic, fireball, blight, dimension door, cloudkill, scrying, disintegrate, globe of invulnerability, finger of death, plane shift, dominate monsters, power word stun, power word kill</spells>
 			</spellcasting>
-			<trait>
-				<name>Turn Resistance. </name>
-				<effect>The lich has advantage on saving throws against any effect that turns undead.</effect>
-			</trait>
+			<trait>&lt;b&gt;&lt;i&gt;Turn Resistance. &lt;/i&gt;&lt;/b&gt;The lich has advantage on saving throws against any effect that turns undead.</trait>
 		</traits>
 		<actions>
-			<action>
-				<name>Paralyzing Touch. </name>
-				<attack>Melee Spell Attack: </attack>
-				<effect>+12 to hit, reach 5ft., one creature. Hit: 10 (3d6) cold damage The target must succeed on a DC 18 Constitution saving throw or be paralyzed for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</effect>
-			</action>
+			<action>&lt;b&gt;&lt;i&gt;Paralyzing Touch. &lt;/i&gt;&lt;/b&gt;&lt;i&gt;Melee Spell Attack: &lt;/i&gt;+12 to hit, reach 5ft., one creature. &lt;i&gt;Hit: &lt;/i&gt;10 (3d6) cold damage The target must succeed on a DC 18 Constitution saving throw or be paralyzed for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</action>
 		</actions>
 		<lactions>
-			<details>The lich can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The lich regains spent legendary actions at the start of its turn.</details>
-			<laction>
-				<name>Cantrip. </name>
-				<effect>The lich casts a cantrip.</effect>
-			</laction>
-			<laction>
-				<name>Paralyzing Touch (Costs 2 Actions). </name>
-				<effect>The lich uses its Paralyzing Touch.</effect>
-			</laction>
-			<laction>
-				<name>Frightening Gaze (Costs 2 Actions). </name>
-				<effect>The lich fixes its gaze on one creature it can see within 10 feet of it. The target must succeed on a DC 18 Wisdom saving throw against this magic or become frightened for 1 minute. The frightened target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to the lich's gaze for the next 24 hours.</effect>
-			</laction>
-			<laction>
-				<name>Disrupt Life (Costs 3 Actions). </name>
-				<effect>Each living creature within 20 feet of the lich must make a DC 18 Constitution saving throw against this magic, taking 21 (6d6) necrotic damage on a failed save, or half as much damage on a successful one.</effect>
-			</laction>
+			<laction>The lich can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The lich regains spent legendary actions at the start of its turn.</laction>
+			<laction>&lt;b&gt;&lt;i&gt;Cantrip. &lt;/i&gt;&lt;/b&gt;The lich casts a cantrip.</laction>
+			<laction>&lt;b&gt;&lt;i&gt;Paralyzing Touch (Costs 2 Actions). &lt;/i&gt;&lt;/b&gt;The lich uses its Paralyzing Touch.</laction>
+			<laction>&lt;b&gt;&lt;i&gt;Frightening Gaze (Costs 2 Actions). &lt;/i&gt;&lt;/b&gt;The lich fixes its gaze on one creature it can see within 10 feet of it. The target must succeed on a DC 18 Wisdom saving throw against this magic or become frightened for 1 minute. The frightened target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to the lich's gaze for the next 24 hours.</laction>
+			<laction>&lt;b&gt;&lt;i&gt;Disrupt Life (Costs 3 Actions). &lt;/i&gt;&lt;/b&gt;Each living creature within 20 feet of the lich must make a DC 18 Constitution saving throw against this magic, taking 21 (6d6) necrotic damage on a failed save, or half as much damage on a successful one.</laction>
 		</lactions>
 	</monster>
 	<monster>
@@ -166,10 +85,7 @@
 		<langs>---</langs>
 		<challenge>0 (0 XP)</challenge>
 		<traits>
-			<trait>
-				<name>Water Breathing. </name>
-				<effect>The sea horse can only breathe underwater.</effect>
-			</trait>
+			<trait>&lt;b&gt;&lt;i&gt;Water Breathing. &lt;/b&gt;&lt;/i&gt;The sea horse can only breathe underwater.</trait>
 		</traits>
 	</monster>
 	<weapon>
